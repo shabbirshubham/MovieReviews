@@ -1,0 +1,127 @@
+<head>
+    <script src="../../js/jquery.js"></script>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('#search-trigger').click(function () {
+                $('#search-input').css({'width':'150px','display':'initial'});
+            })
+        });
+
+        $(document).click(function (e) {
+            if(!$(e.target).closest('.ngen-search-form').length){
+                $('#search-input').css({'width':'0px','display':'none'});
+            }
+        });
+    </script>
+</head>
+
+
+
+<div class="site-header">
+    <div class="container">
+        <!-- #branding -->
+        <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top: 15px;">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand pull-left" href="#!/home2">
+                        <img src="https://res.cloudinary.com/candidbusiness/image/upload/v1455406304/dispute-bills-chicago.png" alt="Dispute Bills">
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+                        <li class="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Movies<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#!/inTheatre">In Theatres</a></li>
+                                <li><a href="#">Coming Soon</a></li>
+                                <li><a href="#">Top Rated Movies</a></li>
+                                <li class="dropdown">
+
+                                </li>
+
+                            </ul>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown">Genre <b class="caret"></b></a>
+                            <ul class="dropdown-menu multi-column columns-2">
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <ul class="multi-column-dropdown">
+                                            <li><a href="#">Action</a></li>
+                                            <li><a href="#">Adventure</a></li>
+                                            <li><a href="#">Animation </a></li>
+                                            <li><a href="#">Biography</a></li>
+                                            <li><a href="#">Comedy</a></li>
+                                            <li><a href="#">Crime</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <ul class=" multi-column-dropdown">
+                                            <li><a href="#">Drama</a></li>
+                                            <li><a href="#">Fantasy</a></li>
+                                            <li><a href="#">History</a></li>
+                                            <li><a href="#">Horror</a></li>
+                                            <li><a href="#">Musical</a></li>
+                                            <li><a href="#">Mystery</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <ul class="multi-column-dropdown">
+                                            <li><a href="#">Romance</a></li>
+                                            <li><a href="#">Sci-Fi</a></li>
+                                            <li><a href="#">Sport</a></li>
+                                            <li><a href="#">Thriller</a></li>
+                                            <li><a href="#">War</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">News <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#!/news">News</a></li>
+                                <li><a href="#">Lastest Reviews</a></li>
+                                <li><a href="#">Talking Points</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#!/aboutUs">About</a></li>
+                        <li><a href="#!/contactUs">Contact</a></li>
+                        <li><a  data-target="#myLoginModal" data-toggle="modal">Login</a></li>
+                        <li class="navbar hidden-xs">
+                            <form class="navbar-form form-search ngen-search-form">
+                                <div class="input-group ">
+                                    <input id="search-input" type="text" class="form-control form-search-input" placeholder="Search">
+                                    <span class="input-group-btn">
+                                        <button id="search-trigger" class="btn btn-default form-search-submit" type="button"> <span class="fa fa-search"></span></button>
+                                  </span>
+                                </div>
+                            </form>
+                        </li>
+                        <li class="navbar hidden-sm hidden-md hidden-lg">
+                            <form class="navbar-form">
+                                <div class="input-group ">
+                                    <input type="text" class="form-control" placeholder="Search">
+                                    <span class="input-group-btn">
+                                        <button  class="btn btn-default form-search-submit" type="button"> <span class="fa fa-search"></span></button>
+                                  </span>
+                                </div>
+                            </form>
+                        </li>
+
+
+                    </ul>
+
+
+                </div><!-- /.navbar-collapse -->
+        </nav>
+
+    </div>
+</div>
