@@ -22,5 +22,5 @@ app.set('view engine', 'ejs');
 app.use(app.express.static(__dirname + '/public'));
 // require('./public/app');
 // require('./public/mongo/app');
-// require("./server/app");
-app.listen(process.env.PORT || 4000);
+require("./server/app");
+app.listen(process.env.PORT || 3200);

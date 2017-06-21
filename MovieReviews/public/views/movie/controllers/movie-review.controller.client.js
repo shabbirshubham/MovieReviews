@@ -6,10 +6,9 @@
 
     function movieReviewCtrl(MovieService,$location,$routeParams,$sce) {
         var model = this;
-        // model.movieId = $routeParams.movieId;
-        var API_KEY = "8b4a101400c25efdf094f6b9b8081675";
-        var movieId = 297761;
+        model.movieId = $routeParams.movieId;
         model.getEmbedURL = getEmbedURL;
+        model.getActorInfo = getActorInfo;
 
         // var configUrl = {
         //     "async": true,
@@ -48,47 +47,12 @@
         //     "data": "{}"
         // };
 
-
         function init() {
             MovieService
-                .getVideo(movieId)
+                .getVideo(model.movieId )
                 .then(function (video) {
-                    model.youtubeurl = video.results[0].key;
+                    model.youtubeurl = "https://youtu.be/"+video.results[0].key;
                 });
-
-
-            MovieService
-                .getCredits(movieId)
-                .then(function (credits) {
-                        var directors=[];
-                        var writers = [];
-                        var actors = [];
-                        for(a in credits.cast){
-                            if(actors.length>3)
-                                break;
-                            else{
-                                actors.push(credits.cast[a].name);
-                            }
-                        }
-                        for(c in credits.crew){
-                            if(directors.length <3) {
-                                if (credits.crew[c].department === "Directing") {
-                                    directors.push(credits.crew[c].name);
-                                }
-                            }
-                            if(writers.length<3) {
-                                if (credits.crew[c].department === "Writing") {
-                                    writers.push(credits.crew[c].name);
-                                }
-                            }
-                            if(directors.length>=3 && writers.length>=3)
-                                break;
-                        }
-                        model.directors = directors;
-                        model.actors = actors;
-                        model.writers = writers;
-                });
-
 
             MovieService
                 .getConfig()
@@ -96,8 +60,40 @@
                         var baseURL = configs.images.secure_base_url+"";
                         var size = configs.images.profile_sizes[2];
                         var poster_config_path = baseURL + size;
+                    MovieService
+                        .getCredits(model.movieId )
+                        .then(function (credits) {
+                            var directors=[];
+                            var writers = [];
+                            var actors = [];
+                            for(a in credits.cast){
+                                if(actors.length>3)
+                                    break;
+                                else{
+                                    credits.cast[a].profile_path = poster_config_path + credits.cast[a].profile_path;
+                                    actors.push(credits.cast[a]);
+                                }
+                            }
+                            for(c in credits.crew){
+                                if(directors.length <3) {
+                                    if (credits.crew[c].department === "Directing") {
+                                        directors.push(credits.crew[c].name);
+                                    }
+                                }
+                                if(writers.length<3) {
+                                    if (credits.crew[c].department === "Writing") {
+                                        writers.push(credits.crew[c].name);
+                                    }
+                                }
+                                if(directors.length>=3 && writers.length>=3)
+                                    break;
+                            }
+                            model.directors = directors;
+                            model.actors = actors;
+                            model.writers = writers;
+                        });
                         MovieService
-                            .getMovie(movieId)
+                            .getMovie(model.movieId )
                             .then(function (response) {
                                         model.movie = response;
                                         model.poster_path = poster_config_path + response.backdrop_path;
@@ -112,77 +108,48 @@
                                         model.averagevote = response.vote_average;
                                         model.votes = response.vote_count;
                                         model.homepage = response.homepage;
+                                        model.countries = response.production_countries;
+                                        model.languages = response.spoken_languages;
+                                        model.status = response.status;
+                                        model.companies = response.production_companies;
+                                        model.budget = moneyFormat(response.budget,'$');
+                                        model.gross = moneyFormat(response.revenue,'$');
+                                        model.tagline = response.tagline;
                             });
+                    MovieService
+                        .getSimilarMovies(model.movieId )
+                        .then(function (movies) {
+                            var movs = [];
+                            for(m in movies.results){
+                                if(movs.length>5)
+                                    break;
+                                var similarmoviepath = poster_config_path + movies.results[m].poster_path;
+                                movies.results[m].poster_path = similarmoviepath;
+                                movs.push(movies.results[m]);
+                            }
+                            model.similarmovies = movs;
+                        });
                 });
-
-            // $.ajax(reviewUrl).done(function (review) {
-            //     var reviews = [];
-            //     for(m in review.results){
-            //         if(reviews.length<10){
-            //             reviews.push(review.results[m]);
-            //         }
-            //     }
-            //     model.reviews = reviews;
-            // });
-            //
-            // $.ajax(videoUrl).done(function (video){
-            //     model.youtubeurl = video.results[0].key;
-            // });
-            //
-            // $.ajax(creditUrl).done(function (credits) {
-            //     var directors=[];
-            //     var writers = [];
-            //     var actors = [];
-            //     for(a in credits.cast){
-            //         if(actors.length>3)
-            //             break;
-            //         else{
-            //             actors.push(credits.cast[a].name);
-            //         }
-            //     }
-            //     for(c in credits.crew){
-            //         if(directors.length <3) {
-            //             if (credits.crew[c].department === "Directing") {
-            //                 directors.push(credits.crew[c].name);
-            //             }
-            //         }
-            //         if(writers.length<3) {
-            //             if (credits.crew[c].department === "Writing") {
-            //                 writers.push(credits.crew[c].name);
-            //             }
-            //         }
-            //         if(directors.length>=3 && writers.length>=3)
-            //             break;
-            //     }
-            //     model.directors = directors;
-            //     model.actors = actors;
-            //     model.writers = writers;
-            // });
-            //
-            // //
-            // $.ajax(configUrl).done(function (configs) {
-            //     var baseURL = configs.images.secure_base_url+"";
-            //     var size = configs.images.profile_sizes[2];
-            //     var poster_config_path = baseURL + size;
-            //     $.ajax(moviedata).done(function (response) {
-            //         model.movie = response;
-            //         model.poster_path = poster_config_path + response.backdrop_path;
-            //         model.title = response.original_title;
-            //         arr = response.release_date.split("-");
-            //         model.releaseyear = arr[0];
-            //         model.releasedate = response.release_date;
-            //         model.hour = parseInt(response.runtime/60);
-            //         model.minutes = response.runtime - 60*model.hour;
-            //         model.genres = response.genres;
-            //         model.overview = response.overview;
-            //         model.averagevote = response.vote_average;
-            //         model.votes = response.vote_count;
-            //         model.homepage = response.homepage;
-            //     });
-            // });
         }
 
         init();
+
+        function moneyFormat(price, sign) {
+            const pieces = parseFloat(price).toFixed(2).split('');
+            var ii = pieces.length - 3;
+            while ((ii-=3) > 0) {
+                pieces.splice(ii, 0, ',')
+            }
+            return sign + pieces.join('')
+        }
+
+        function getActorInfo(actorId) {
+            MovieService
+                .getActorInfo(actorId)
+                .then(function (actor) {
+                    return actor.biography;
+                });
+        }
 
         function getEmbedURL(embedURL) {
             //var embedURL = "https://youtu.be/AM2Ivdi9c4E";

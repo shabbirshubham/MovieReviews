@@ -7,15 +7,51 @@ html {
 }
 body {
     margin: 0;
-    background-image: url('../images/background.jpg');}
+    background-image: url('../images/background.jpg');
+}
 ul{
     list-style: none;
 }
 a {
     text-decoration: none ;
+    cursor: pointer;
 }
 a:hover{
-    text-decoration-line: underline;
+    text-decoration:none;
+}
+b,
+strong {
+    font-weight: bold; }
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0; }
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0; }
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0; }
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0; }
+
+h6 {
+    font-size: 0.75em;
+    margin: 2.33em 0; }
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    margin: 0 0 20px;
+    color: slategrey;
 }
 
 .navbar-brand {
@@ -29,7 +65,7 @@ a:hover{
 
 
 .page figure {
-    margin-bottom: 30px; }
+    margin-bottom: 0px; }
 .page img {
     max-width: 100%;
     margin-bottom: 30px; }
@@ -205,6 +241,68 @@ a:hover{
     /*width: 0px;*/
 
 /*}*/
+hr {
+    border: none;
+    border-bottom: 1px solid #777;
+}
+
+ul, ol {
+    margin: 0;
+    padding-left: 0; }
+
+#genrelist {
+    display: inline;
+    list-style: none;
+}
+#genrelist li {
+    display: inline;
+}
+#genrelist li + li:before {
+    content: ", ";
+}
+
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+}
+.margin-top{
+    margin-top:10px;
+}
+.modal-header, h4{
+    background-color: #5cb85c;
+    color:white !important;
+    text-align: center;
+    font-size: 30px;
+}
+.close {
+    color: black;
+    text-align: center;
+    font-size: 30px;
+}
+input.ng-invalid {
+    border: 1px solid red;
+}
+input.ng-valid {
+    border: 1px solid green;
+}
+
+
 
 
 

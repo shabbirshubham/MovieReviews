@@ -15,7 +15,10 @@
 				<!--</div>-->
 
 				<!-- Main Body -->
-                <h1 class="text-center "><strong><a class="section-title" href={{model.homepage}}>{{model.title}}</a></strong></h1>
+                <h1 class="text-center ">
+                    <strong><a class="section-title" href={{model.homepage}}>{{model.title}}</a>
+                    </strong>
+                </h1>
                 <h1 class="text-center"><strong>({{model.releaseyear}})</strong>
                     <span style="display: inline;padding-left: 30px">
                         <img src="../../../images/stars.png"/>
@@ -44,30 +47,18 @@
 				<div class="content">
 					<div class="row">
 						<div class="col-md-6">
-							<figure class="movie-poster"><img src={{model.poster_path}}>
-                            </figure>
+                                <figure class="movie-poster">
+                                    <img src={{model.poster_path}}
+                                         onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                </figure>
 
 						</div>
 						<div class="col-md-6">
-                            <iframe width=100% height="300"
-                                    src={{model.getEmbedURL(model.youtubeurl)}}
-                                    frameborder="0" allowfullscreen>
-                            </iframe>
-							<!--<h2 class="movie-title">The Croods</h2>-->
-							<!--<ul class="movie-meta">-->
-								<!--<li><strong>Rating:</strong>-->
-									<!--<div class="star-rating" title="Rated 4.00 out of 5"><span style="width:80%"><strong class="rating">4.00</strong> out of 5</span></div>-->
-								<!--</li>-->
-								<!--<li><strong>Length:</strong> 98 min</li>-->
-								<!--<li><strong>Premiere:</strong> 22 March 2013 (USA)</li>-->
-								<!--<li><strong>Category:</strong> Animation/Adventure/Comedy</li>-->
-							<!--</ul>-->
-
-							<!--<ul class="starring">-->
-								<!--<li><strong>Directors:</strong> Kirk de Mico (as Kirk DeMico). Chris Sanders</li>-->
-								<!--<li><strong>Writers:</strong> Chris Sanders (screenplay), Kirk De Micco (screenplay)</li>-->
-								<!--<li><strong>Stars:</strong> Nicolas Cage, Ryan Reynolds, Emma Stone</li>-->
-							<!--</ul>-->
+                                <iframe width=100% height="300"
+                                        src={{model.getEmbedURL(model.youtubeurl)}}
+                                        onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                        frameborder="0" allowfullscreen>
+                                </iframe>
 						</div>
                     </div>
 
@@ -96,7 +87,7 @@
                             <div class="col-md-12">
                                 <strong>Actors:</strong>
                                 <span ng-repeat="actor in model.actors">
-                                {{actor}}<span ng-show=" ! $last ">,</span>
+                                {{actor.name}}<span ng-show=" ! $last ">,</span>
                                 </span>
                             </div>
                         </div>
@@ -127,15 +118,101 @@
                         <!--</div>-->
                     <!--</div>-->
                     <h1>Cast</h1>
-                    <h3>Cast overview, first billed only:</h3>
+                    <h2>Cast overview:</h2>
+                    <div class="content">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Actor name</th>
+                                        <th>Role Played</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="active" ng-repeat="actor in model.actors" class="col-md-12">
+                                    <td>
+                                        <img height="100" src={{actor.profile_path}}
+                                             onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                        </td>
+                                    <td>{{actor.name}}</td>
+                                    <td>{{actor.character}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <h2>People who liked this also liked... </h2>
                     <div class="content">
                         <div class="row">
-                            <div ng-repeat="actors in model.actors" class="col-md-12">
-                                <img src="">
+                            <div ng-repeat="movie in model.similarmovies" class="col-md-4">
+                                <a href="#!movie/{{movie.id}}">
+                                    <img src="{{movie.poster_path}}"
+                                         onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                    />
+                                    <p style="font-size: 20px;font-weight: 700;">{{movie.original_title}}</p>
+                                    <p>{{movie.vote_average}}<span style="margin-left: 10px" class="fa fa-star"></span></p>
+                                </a>
                             </div>
                         </div>
                     </div>
 
+                    <hr/>
+                    <h2>Details</h2>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                <strong>HomePage:</strong>
+                                <span><a href="{{model.homepage}}">{{model.homepage}}</a></span>
+                                </p>
+
+                                <p>
+                                <strong>Tagline:</strong>
+                                <span>{{model.tagline}}</span>
+                                </p>
+
+                                <p>
+                                <strong>Movie Status:</strong>
+                                <span>{{model.status}}</span>
+                                </p>
+
+                                <p>
+                                <strong>Budget:</strong>
+                                <span>{{model.budget}}</span>
+                                </p>
+
+                                <p>
+                                <strong>Gross Revenue:</strong>
+                                <span>{{model.gross}}</span>
+                                </p>
+
+                                <p>
+                                <strong>Country:</strong>
+                                <span ng-repeat="country in model.countries">
+                                {{country.name}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                                <p>
+
+                                <p>
+                                <strong>Languages:</strong>
+                                <span ng-repeat="language in model.languages">
+                                {{language.name}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                                </p>
+
+                                <p>
+                                <strong>Company Credits:</strong>
+                                <span ng-repeat="company in model.companies">
+                                {{company.name}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
 			</div>
 		</div> <!-- .container -->
 	</div>

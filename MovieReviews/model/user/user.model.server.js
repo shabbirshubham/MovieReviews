@@ -13,6 +13,8 @@ userModel.findUserByEmail=findUserByEmail;
 userModel.findUserByUsername=findUserByUsername;
 userModel.updateUser=updateUser;
 userModel.findUserById=findUserById;
+userModel.findUserByGoogleId = findUserByGoogleId;
+userModel.findUserByFacebookId = findUserByFacebookId;
 //----------------------------------------------------------
 module.exports = userModel;
 //--------------------------------------------------------
@@ -45,4 +47,12 @@ function updateUser(userId,user) {
 
 function findUserById(userId) {
     return userModel.findById(userId);
+}
+
+function findUserByGoogleId(googleId) {
+    return userModel.findOne({'google.id':googleId});
+}
+
+function findUserByFacebookId(facebookId) {
+    return userModel.findOne({'facebook.id': facebookId});
 }

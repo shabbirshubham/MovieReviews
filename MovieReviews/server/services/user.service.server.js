@@ -3,8 +3,10 @@
 
         var app = require('../../express');
         var passport = require('passport');
-        var localStrategy= require('passport-local').Strategy;
+        var LocalStrategy= require('passport-local').Strategy;
         var bcrypt = require('bcrypt-nodejs');
+        var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+        var FacebookStrategy = require('passport-facebook').Strategy;
 
 //---------------------------------------------------
         passport.serializeUser(serializeUser);
@@ -16,17 +18,49 @@
     // All URI
 
         app.post('/api/project/login',passport.authenticate('local'),login);
-        app.post('/api/project/login',register);
+        app.post('/api/project/register',register);
         app.get('/api/project/checkLoggedinUser',checkLoggedinUser);
         app.post('/api/project/logout',logout);
         app.put('/api/project/updateUser',updateUser);
         app.get('/api/project/findUserByUsername',findUserByUsername);
         app.delete('/api/project/deleteUser',deleteUser);
 
+        app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+        app.get('/google/callback',
+            passport.authenticate('google', {
+                successRedirect: '/',
+                failureRedirect: '/'
+            }));
+
+        app.get ('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+        app.get('/auth/facebook/callback',
+            passport.authenticate('facebook', {
+                successRedirect: '/',
+                failureRedirect: '/'
+            }));
+
+        var googleConfig = {
+            clientID     : "425690137519-fc8lierptvbhfhj1oa4bqgbn159ectkr.apps.googleusercontent.com",
+            clientSecret : "EMtx7lnIFVE_oFkveJK4mY0x",
+            callbackURL  : "http://localhost:3200/google/callback"
+        };
+        var facebookConfig = {
+            // clientID     : "242625612892833",
+            // clientSecret : "0c36a8f1fbe8ca589dfc83ca8dfd442e",
+            // callbackURL  : "https://deb-shubham-webdev.herokuapp.com/auth/facebook/callback",
+            clientID     : "242625612892833",
+            clientSecret : "0c36a8f1fbe8ca589dfc83ca8dfd442e",
+            // callbackURL  : "https://deb-shubham-webdev.herokuapp.com/auth/facebook/callback",
+            callbackURL  : "http://localhost:3200/auth/facebook/callback",
+            profileFields: ['id', 'displayName', 'email']
+        };
+
+        passport.use(new GoogleStrategy(googleConfig, googleStrategy));
+        passport.use(new FacebookStrategy(facebookConfig, facebookStrategy));
 //------------------------------------------------------------
         // ALL function definitions
 
-        function LocalStrategy(username, password, done) {
+        function localStrategy(username, password, done) {
                 userModel
                     .findUserByCredentials(username,password)
                     .then(function (user) {
@@ -114,4 +148,79 @@
                     });
         }
 
+        function facebookStrategy(token, refreshToken, profile, done) {
+            userModel
+                .findUserByFacebookId(profile.id)
+                .then(
+                    function(user) {
+                        if(user) {
+                            return done(null, user);
+                        } else {
+                            console.log(profile);
+                            var email = profile.emails[0].value;
+                            var emailParts = email.split("@");
+                            var newFacebookUser = {
+                                username:  emailParts[0],
+                                firstName: profile.name[0],
+                                lastName:  profile.name[1],
+                                email:     email,
+                                facebook: {
+                                    id:    profile.id,
+                                    token: token
+                                }
+                            };
+                            return userModel.createUser(newFacebookUser);
+                        }
+                    },
+                    function(err) {
+                        if (err) { return done(err); }
+                    }
+                )
+                .then(
+                    function(user){
+                        return done(null, user);
+                    },
+                    function(err){
+                        if (err) { return done(err); }
+                    }
+                );
+        }
+
+        function googleStrategy(token, refreshToken, profile, done) {
+            userModel
+                .findUserByGoogleId(profile.id)
+                .then(
+                    function(user) {
+                        if(user) {
+                            return done(null, user);
+                        } else {
+                            var email = profile.emails[0].value;
+                            var emailParts = email.split("@");
+                            var newGoogleUser = {
+                                username:  emailParts[0],
+                                firstName: profile.name.givenName,
+                                lastName:  profile.name.familyName,
+                                email:     email,
+                                google: {
+                                    id:    profile.id,
+                                    token: token
+                                }
+                            };
+                            return userModel.createUser(newGoogleUser);
+                        }
+                    },
+                    function(err) {
+                        if (err) { return done(err); }
+                    }
+                )
+                .then(
+                    function(user){
+                        console.log(user);
+                        return done(null, user);
+                    },
+                    function(err){
+                        if (err) { return done(err); }
+                    }
+                );
+        }
 

@@ -1,0 +1,66 @@
+<div ng-include="'views/common/site-header.view.client.html'"></div>
+
+<div class="main-body">
+    <div class="container">
+        <div class="page">
+
+            <h1>GENRE: {{model.genre}}</h1>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <h2>Most Popular {{model.genre}} Feature Films</h2>
+                    </thead>
+                    <tbody class="col-md-12">
+                        <tr class="active" ng-repeat="movie in model.movies">
+                            <td>  {{$index+1 + model.pagenumber}} .</td>
+                            <td class="hidden-sm hidden-xs" width="20%">
+                                <img src="{{movie.poster_path}}"
+                                     alt="http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg">
+                            </td>
+                            <td>
+                                <h1><a href="">{{movie.title}}</a>
+                                    <span>({{movie.release_date}})</span>
+                                </h1>
+
+                                <span style="display: inline-table">
+                                    {{movie.vote_average}}
+                                    <span class="fa fa-star"></span>
+                                    ({{movie.vote_count}} votes)
+                                </span>
+
+                                <p>
+                                   {{movie.overview}}
+                                </p>
+
+                                <strong>Directors:</strong>
+                                <span ng-repeat="director in model.directors">
+                                        {{director}}<span ng-show=" ! $last ">,</span>
+                                </span>
+
+                                <p>
+                                <strong>Actors:</strong>
+                                <span ng-repeat="actor in model.actors">
+                                        {{actor.name}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                                </p>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <ul class="pagination pagination-lg">
+                <li><a href="" ng-click="model.pagination(1)">1</a></li>
+                <li><a href="" ng-click="model.pagination(2)">2</a></li>
+                <li><a href="" ng-click="model.pagination(3)">3</a></li>
+                <li><a href="" ng-click="model.pagination(4)">4</a></li>
+                <li><a href="" ng-click="model.pagination(5)">5</a></li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<div ng-include="'views/common/footer.view.client.html'"></div>

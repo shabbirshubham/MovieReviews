@@ -5,19 +5,22 @@
 
     function configuration($routeProvider) {
          $routeProvider
-        //     .when('/',{
-        //         templateUrl:'views/home/templates/home.view.client.html'
-        //     })
-            .when('/home',{
-                templateUrl:'views/home/templates/home.view.client.html'
+            .when('/',{
+                templateUrl:'views/home/templates/home2.view.client.html',
+                controller:'homeCtrl',
+                controllerAs:'model'
             })
-             .when('/home2',{
-                 templateUrl:'views/home/templates/home2.view.client.html'
+            .when('/home',{
+                templateUrl:'views/home/templates/home2.view.client.html',
+                controller:'homeCtrl',
+                controllerAs:'model'
+            })
+             .when('/movie/genre/:genreId',{
+                 templateUrl:'views/movie/templates/movie-genre-list.view.client.html',
+                 controller:'movieGenreCtrl',
+                 controllerAs:'model'
              })
-
-            
-
-            .when('/inTheatre',{
+            .when('/movie/:movieId',{
                 templateUrl:'views/movie/templates/movie-review.view.client.html',
                 controller:'movieReviewCtrl',
                 controllerAs:'model'
@@ -41,9 +44,6 @@
                 controller:'newsCtrl',
                 controllerAs:'model'
             })
-    }
-
-
-
+        }
     }
 )();
