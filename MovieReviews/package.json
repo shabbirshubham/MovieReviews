@@ -9,6 +9,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
+    "lesshat": "^4.1.0",
     "mongoose": "^4.10.6",
     "multer": "^1.3.0",
     "passport": "^0.3.2",

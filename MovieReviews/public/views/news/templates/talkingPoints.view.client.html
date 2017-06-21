@@ -1,11 +1,4 @@
-<style>
-	@media screen and (max-width: 768px) {
-		h1{
-			font-size:22px;
-		}
-	}
 
-</style>
 
 <div ng-include="'views/common/site-header.view.client.html'">
 
@@ -16,30 +9,30 @@
 		<div class="container">
 			<div class="page">
 				<div class="breadcrumbs">
-					<a href="../../../index.html">Home</a>
-					<span>News</span>
+					<a href="#!/home">Home</a>
+					<span>News-> Talking Points</span>
 				</div>
 
 				<div class="content">
 
-					<div ng-repeat="news in model.allNews"  style="border-bottom: 1px solid #dfdfdf; margin-top: 25px">
-						<div class="hidden-xs row">
+					<div ng-repeat="talkingPoint in model.talkingPoints "  style="border-bottom: 1px solid #dfdfdf; margin-top: 25px">
+						<div class="hidden-xs row ">
 							<div class="col-sm-4 ">
-							<img class="img-responsive" src="{{news.fields.thumbnail}}" style="float:left; margin-bottom: 10px ">
+							<img class="img-responsive" src="{{talkingPoint.fields.thumbnail}}" style="float:left; margin-bottom: 10px ">
 							</div>
 							<div class="col-sm-8">
-								<a href="{{news.fields.shortUrl}}"><h3 class="section-title text-left "  >{{news.webTitle}}</h3></a>
-								<p class="text-left hidden-xs">{{news.fields.trailText}}</p>
-								<h6>-{{news.fields.byline}}</h6>
+								<a href="{{talkingPoint.fields.shortUrl}}"><h3 class="section-title text-left "  >{{talkingPoint.webTitle}}</h3></a>
+								<p class="text-left hidden-xs">{{talkingPoint.fields.trailText}}</p>
+								<h6>-{{talkingPoint.fields.byline}}</h6>
 							</div>
 
 
 						</div>
 						<div class=" hidden-lg hidden-md hidden-sm" >
-							<a href="{{news.fields.shortUrl}}" >
-								<img class="img-responsive" src="{{news.fields.thumbnail}}" style="float:left; margin-right: 8px; margin-bottom: 20px; max-height: 80%">
+							<a href="{{talkingPoint.fields.shortUrl}}" >
+								<img class="img-responsive" src="{{talkingPoint.fields.thumbnail}}" style="float:left; margin-right: 8px; margin-bottom: 20px; max-height: 80%">
 								<h1 class="section-title text-left hidden-lg hidden-md hidden-sm" style="font-size: 22px" >
-									{{news.webTitle}}
+									{{talkingPoint.webTitle}}
 								</h1>
 
 							</a>

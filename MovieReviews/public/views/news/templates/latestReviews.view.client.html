@@ -1,0 +1,64 @@
+
+<div ng-include="'views/common/site-header.view.client.html'">
+
+</div>
+
+	<div ng-include="'views/common/loginbody.view.client.html'"></div>
+	<main class="main-body">
+		<div class="container">
+			<div class="page">
+				<div class="breadcrumbs">
+					<a href="#!/home">Home</a>
+					<span>News -> Latest Reviews</span>
+				</div>
+
+				<div class="content">
+
+					<div ng-repeat="review in model.newsReviews"  style="border-bottom: 1px solid #dfdfdf; margin-top: 25px">
+						<div class="hidden-xs row">
+							<div class="col-sm-4 ">
+							<img class="img-responsive" src="{{review.fields.thumbnail}}" style="float:left; margin-bottom: 10px ">
+							</div>
+							<div class="col-sm-8">
+								<a href="{{review.fields.shortUrl}}"><h3 class="list-title text-left "  >{{review.webTitle}}</h3></a>
+								<div class="star-ratings-css">
+									<div class="star-ratings-css-top" ng-style="{'width':{{review.fields.starRating}}*(100/5)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+									<div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+								</div>
+								<!--<span>{{review.fields.starRating}}</span>-->
+								<p class="text-left hidden-xs">{{review.fields.trailText}}</p>
+								<h6>-{{review.fields.byline}}</h6>
+							</div>
+
+
+						</div>
+						<div class=" hidden-lg hidden-md hidden-sm" >
+							<a href="{{review.fields.shortUrl}}" >
+								<img class="img-responsive" src="{{review.fields.thumbnail}}" style="float:left; margin-right: 8px; margin-bottom: 20px; max-height: 80%">
+								<h1 class="list-title text-left hidden-lg hidden-md hidden-sm" style="font-size: 22px" >
+									{{review.webTitle}}
+								</h1>
+								<div class="star-ratings-css">
+									<div class="star-ratings-css-top" ng-style="{'width':{{review.fields.starRating}}*(100/5)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+									<div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+								</div>
+
+							</a>
+
+						</div>
+					</div>
+
+
+
+				</div>
+			</div>
+		</div> <!-- .container -->
+	</main>
+
+	<div ng-include="'views/common/footer.view.client.html'"></div>
+
+</div>
+
+	<script src="../../../js/jquery-1.11.1.min.js"></script>
+	<script src="../../../js/plugins.js"></script>
+	<script src="../../../js/app.js"></script>

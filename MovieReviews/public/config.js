@@ -39,11 +39,27 @@
             .when('/joinUs',{
                 templateUrl:'views/home/templates/joinus.view.client.html'
             })
-            .when('/news',{
-                templateUrl:'views/news/templates/news.view.client.html',
-                controller:'newsCtrl',
+            .when('/news/top_news',{
+                templateUrl:'views/news/templates/topNews.view.client.html',
+                controller:'topNewsCtrl',
                 controllerAs:'model'
             })
+             .when('/news/latest_reviews',{
+                 templateUrl:'views/news/templates/latestReviews.view.client.html',
+                 controller:'latestReviewCtrl',
+                 controllerAs:'model'
+             })
+            .when('/news/talking_points',{
+                templateUrl:'views/news/templates/talkingPoints.view.client.html',
+                controller:'talkingPointsCtrl',
+                controllerAs:'model'
+            })
+        //    User Congig Settings
+             .when('/user/:userId',{
+                 templateUrl: 'views/user/templates/profile.view.client.html',
+                 controller: 'profileCtrl',
+                 controllerAs:"model"
+             })
         }
     }
 )();

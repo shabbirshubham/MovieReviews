@@ -132,7 +132,7 @@
                                 <tbody>
                                 <tr class="active" ng-repeat="actor in model.actors" class="col-md-12">
                                     <td>
-                                        <img height="100" src={{actor.profile_path}}
+                                        <img  height="100" ng-src={{actor.profile_path}}
                                              onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
                                         </td>
                                     <td>{{actor.name}}</td>
@@ -149,11 +149,11 @@
                         <div class="row">
                             <div ng-repeat="movie in model.similarmovies" class="col-md-4">
                                 <a href="#!movie/{{movie.id}}">
-                                    <img src="{{movie.poster_path}}"
+                                    <img ng-src="{{movie.poster_path}}"
                                          onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
                                     />
-                                    <p style="font-size: 20px;font-weight: 700;">{{movie.original_title}}</p>
-                                    <p>{{movie.vote_average}}<span style="margin-left: 10px" class="fa fa-star"></span></p>
+                                    <h3>{{movie.original_title}} <span> {{movie.vote_average}}<span style="margin-left: 10px" class="fa fa-star"></span></span> </h3>
+
                                 </a>
                             </div>
                         </div>

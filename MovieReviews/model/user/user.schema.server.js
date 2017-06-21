@@ -15,6 +15,7 @@ var userSchema = mongoose.Schema({
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'}],
     following: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'}],
     role: {type: String, enum: ['user','fan','critic', 'admin'], default: 'user'},
+    watchList:[{type:String}],
     dateCreated: {type: Date, default: Date.now()}
 },{collection:'user'});
 
