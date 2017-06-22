@@ -3,28 +3,13 @@
 
         angular.module("WDP").controller('loginCtrl',loginCtrl);
 
-        function loginCtrl(UserService) {
+        function loginCtrl(UserService,$location) {
             
             var model = this;
-            model.showLoginModal=showLoginModal;
+            //model.isLoggedIn=isLoggedIn;
             model.login=login;
             model.register = register;
-            model.val=10;
-            function showLoginModal() {
-                console.log("BLAAAAAAAAAAAA")
-                ModalService.showModal({
-                    templateUrl: "./login.controller.client.js",
-                    controller: "YesNoController"
-                }).then(function(modal) {
-                    // The modal object has the element built, if this is a bootstrap modal
-                    // you can call 'modal' to show it, if it's a custom modal just show or hide
-                    // it as you need to.
-                    modal.element.modal();
-                    modal.close.then(function (result) {
-                        $scope.message = result ? "You said Yes" : "You said No";
-                    });
-                });
-            }
+
 
             function login(uname,pwd){
 
@@ -36,16 +21,16 @@
                             $location.url('/profile');
                         }
                         else{
-                            model.message='User not found';
+                            model.error='User not found';
                         }
                     },function (err) {
-                        model.message="User Not Found"
+                        model.error="User Not Found"
                     });
 
 
             }
 
-            function register(username,password,verifyPassword){
+            function register(username,email,password,verifyPassword){
 
                 if(password === null || typeof password==='undefined'||
                     verifyPassword === null || typeof verifyPassword==='undefined'
@@ -68,7 +53,8 @@
                             else{
                                 var newUser={
                                     username:username,
-                                    password: password
+                                    password: password,
+                                    email:email
                                 };
                                 return UserService
                                     .register(newUser)

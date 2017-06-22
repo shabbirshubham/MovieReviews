@@ -4,10 +4,19 @@
             .module("WDP")
             .controller('movieGenreCtrl', movieGenreCtrl);
 
-        function movieGenreCtrl(MovieService, $location, $routeParams, $sce) {
+        function movieGenreCtrl(MovieService, $location, $routeParams,UserService, $sce,isLoggedIn) {
             var model = this;
+            model.isLoggedIn=isLoggedIn;
             model.genreId = $routeParams.genreId;
             model.pagination = pagination;
+            model.logout = logout;
+            function logout() {
+                UserService
+                    .logout()
+                    .then(function () {
+                        $location.url('/');
+                    });
+            }
 
             function init() {
                 MovieService

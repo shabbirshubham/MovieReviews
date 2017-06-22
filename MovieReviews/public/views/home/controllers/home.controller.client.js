@@ -3,11 +3,19 @@
         .module('WDP')
         .controller('homeCtrl',homeCtrl);
     
-    function homeCtrl($routeParams,UserService,$location,MovieService) {
+    function homeCtrl($routeParams,UserService,$location,MovieService,isLoggedIn) {
         var model = this;
+        model.isLoggedIn=isLoggedIn;
         model.login = login;
         model.search = search;
-
+        model.logout = logout;
+        function logout() {
+            UserService
+                .logout()
+                .then(function () {
+                    $location.url('/');
+                });
+        }
         function login(username,password) {
             // var found = userService.findUserByCredentials(username,password);
 

@@ -4,10 +4,18 @@
             .module("WDP")
             .controller('theatremovieListCtrl', theatremovieListCtrl);
 
-        function theatremovieListCtrl(MovieService, $location, $routeParams, $sce) {
+        function theatremovieListCtrl(MovieService, $location, $routeParams, $sce,isLoggedIn,UserService) {
             var model = this;
+            model.isLoggedIn=isLoggedIn;
             model.pagination = pagination;
-
+            model.logout = logout;
+            function logout() {
+                UserService
+                    .logout()
+                    .then(function () {
+                        $location.url('/');
+                    });
+            }
             function init() {
 
                 MovieService

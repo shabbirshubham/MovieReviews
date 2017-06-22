@@ -4,9 +4,18 @@
             .module("WDP")
             .controller('topratedmovieListCtrl', topratedmovieListCtrl);
 
-        function topratedmovieListCtrl(MovieService, $location, $routeParams, $sce) {
+        function topratedmovieListCtrl(MovieService, $location, $routeParams, $sce,isLoggedIn,UserService) {
             var model = this;
+            model.isLoggedIn=isLoggedIn;
             model.pagination = pagination;
+            model.logout = logout;
+            function logout() {
+                UserService
+                    .logout()
+                    .then(function () {
+                        $location.url('/');
+                    });
+            }
 
             function init() {
 

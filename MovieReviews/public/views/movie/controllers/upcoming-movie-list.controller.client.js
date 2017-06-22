@@ -4,10 +4,18 @@
             .module("WDP")
             .controller('upcomingmovieListCtrl', upcomingmovieListCtrl);
 
-        function upcomingmovieListCtrl(MovieService, $location, $routeParams, $sce) {
+        function upcomingmovieListCtrl(MovieService, $location, $routeParams, $sce,isLoggedIn,UserService) {
             var model = this;
+            model.isLoggedIn=isLoggedIn;
             model.pagination = pagination;
-
+            model.logout = logout;
+            function logout() {
+                UserService
+                    .logout()
+                    .then(function () {
+                        $location.url('/');
+                    });
+            }
             function init() {
 
                 MovieService

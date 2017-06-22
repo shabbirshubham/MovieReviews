@@ -94,8 +94,18 @@
                         <li><a href="#!/aboutUs">About</a></li>
                         <li><a href="#!/contactUs">Contact</a></li>
                         <!--<li ><a ng-click="showLoginModel()" data-target="#myLoginModal" data-toggle="modal" >Login</a></li>-->
-                        <li ><a href="#!/login">Login</a></li>
-                        <li>{{val}}</li>
+                        <li ng-if="!model.isLoggedIn._id"><a href="#!/login">Login</a></li>
+                        <!--<li ng-if="model.isLoggedIn._id"><a href="#!/profile">Profile</a></li>-->
+                        <li ng-if="model.isLoggedIn._id" class="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> {{model.isLoggedIn.username}}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#!/profile">Profile</a></li>
+                                <li><a href="#!/user/watchList">Watch List</a></li>
+                                <li><a href="#!/user/Reviews">Your Reviews</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a  ng-click="model.logout()">Log out</a></li>
+                            </ul>
+                        </li>
                         <li class="navbar hidden-xs">
                             <form class="navbar-form form-search ngen-search-form">
                                 <div class="input-group ">
@@ -112,7 +122,7 @@
                                     <input type="text" class="form-control" ng-model="model.query" placeholder="Search">
                                     <span class="input-group-btn">
                                         <button  ng-click="model.search(model.query)" class="btn btn-default form-search-submit" type="button">
-                                            <span class="fa fa-search"></span>
+                                            <span class="fa fa-search-plus"></span>
                                         </button>
                                   </span>
                                 </div>

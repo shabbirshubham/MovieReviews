@@ -4,11 +4,20 @@
         .module("WDP")
         .controller('movieReviewCtrl',movieReviewCtrl);
 
-    function movieReviewCtrl(MovieService,$location,$routeParams,$sce) {
+    function movieReviewCtrl(MovieService,$location,$routeParams,$sce,isLoggedIn,UserService) {
         var model = this;
+        model.isLoggedIn=isLoggedIn;
         model.movieId = $routeParams.movieId;
         model.getEmbedURL = getEmbedURL;
         model.getActorInfo = getActorInfo;
+        model.logout = logout;
+        function logout() {
+            UserService
+                .logout()
+                .then(function () {
+                    $location.url('/');
+                });
+        }
 
         // var configUrl = {
         //     "async": true,
