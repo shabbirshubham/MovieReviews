@@ -21,7 +21,7 @@
                 </h1>
                 <h1 class="text-center"><strong>({{model.releaseyear}})</strong>
                     <span style="display: inline;padding-left: 30px">
-                        <img src="../../../images/stars.png"/>
+                        <img ng-src="../../../images/stars.png"/>
                         <span>{{model.averagevote}}
                             <span style="font-size:15px">/10 ({{model.votes}})
                             </span>
@@ -48,14 +48,14 @@
 					<div class="row">
 						<div class="col-md-6">
                                 <figure class="movie-poster">
-                                    <img src={{model.poster_path}}
+                                    <img ng-src={{model.poster_path}}
                                          onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
                                 </figure>
 
 						</div>
 						<div class="col-md-6">
                                 <iframe width=100% height="300"
-                                        src={{model.getEmbedURL(model.youtubeurl)}}
+                                        ng-src={{model.getEmbedURL(model.youtubeurl)}}
                                         onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
                                         frameborder="0" allowfullscreen>
                                 </iframe>
@@ -151,9 +151,7 @@
                                 <a href="#!movie/{{movie.id}}">
                                     <img ng-src="{{movie.poster_path}}"
                                          onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
-                                    />
                                     <h3>{{movie.original_title}} <span> {{movie.vote_average}}<span style="margin-left: 10px" class="fa fa-star"></span></span> </h3>
-
                                 </a>
                             </div>
                         </div>

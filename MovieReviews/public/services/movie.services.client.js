@@ -17,11 +17,40 @@
                 getGenres:getGenres,
                 getMoviesByGenre:getMoviesByGenre,
                 getMoviesByPageNumber:getMoviesByPageNumber,
-                getMovieIdBySearch:getMovieIdBySearch
+                getMovieIdBySearch:getMovieIdBySearch,
+                getRecentMovies:getRecentMovies,
+                getUpcomingMovies:getUpcomingMovies,
+                getTopRatedMovies:getTopRatedMovies
             };
 
             return api;
 
+            function getTopRatedMovies() {
+                var url = "https://api.themoviedb.org/3/movie/top_rated?api_key="+API_KEY+"&language=en-US&page=1";
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+            
+            function getUpcomingMovies() {
+                var url = "https://api.themoviedb.org/3/movie/upcoming?api_key="+API_KEY+"&language=en-US&page=1";
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+            function getRecentMovies() {
+                var url = "https://api.themoviedb.org/3/movie/now_playing?api_key="+API_KEY+"&language=en-US&page=1";
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+            
             function getMovieIdBySearch(query) {
                 var url = "https://api.themoviedb.org/3/search/movie?api_key="+API_KEY+
                             "&language=en-US&query="+query+"&page=1&include_adult=false";

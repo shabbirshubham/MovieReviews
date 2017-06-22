@@ -1,0 +1,101 @@
+<div class="container-fluid">
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Tutorials
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
+            <li role="presentation" class="divider"></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
+        </ul>
+    </div>
+</div>
+
+<div ng-repeat="movie in model.movies" class="row">
+    <hr/>
+    <div class="col-sm-4 hidden-xs pull-left">
+        <!--<span style="display:inline"> {{$index+1 + model.pagenumber}} .</span>-->
+        <img ng-src={{movie.poster_path}} height="300"
+             alt="http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg">
+    </div>
+    <div class="col-sm-7 col-xs-10 pull-left">
+        <h1><a href="#!/movie/{{movie.id}}">{{movie.title}}</a>
+            <span>({{movie.release_date}})</span>
+        </h1>
+
+        <span style="display: inline-table">
+                    {{movie.vote_average}}
+                    <span class="fa fa-star"></span>
+                    ({{movie.vote_count}} votes)
+                    </span>
+
+        <p>
+            {{movie.overview}}
+        </p>
+
+        <strong>Directors:</strong>
+        <span ng-repeat="director in model.directors">
+                    {{director}}<span ng-show=" ! $last ">,</span>
+                    </span>
+
+        <p>
+            <strong>Actors:</strong>
+            <span ng-repeat="actor in model.actors">
+                    {{actor.name}}<span ng-show=" ! $last ">,</span>
+                    </span>
+        </p>
+    </div>
+</div>
+<!--<div class="table-responsive">-->
+<!--<table class="table">-->
+<!--<thead>-->
+<!--<h2>Most Popular {{model.genre}} Feature Films</h2>-->
+<!--</thead>-->
+<!--<tbody class="col-md-12">-->
+<!--<tr class="active" ng-repeat="movie in model.movies">-->
+<!--<td>  {{$index+1 + model.pagenumber}} .</td>-->
+<!--<td class="hidden-sm hidden-xs" width="20%">-->
+<!--<img src="{{movie.poster_path}}"-->
+<!--alt="http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg">-->
+<!--</td>-->
+<!--<td>-->
+<!--<h1><a href="">{{movie.title}}</a>-->
+<!--<span>({{movie.release_date}})</span>-->
+<!--</h1>-->
+
+<!--<span style="display: inline-table">-->
+<!--{{movie.vote_average}}-->
+<!--<span class="fa fa-star"></span>-->
+<!--({{movie.vote_count}} votes)-->
+<!--</span>-->
+
+<!--<p>-->
+<!--{{movie.overview}}-->
+<!--</p>-->
+
+<!--<strong>Directors:</strong>-->
+<!--<span ng-repeat="director in model.directors">-->
+<!--{{director}}<span ng-show=" ! $last ">,</span>-->
+<!--</span>-->
+
+<!--<p>-->
+<!--<strong>Actors:</strong>-->
+<!--<span ng-repeat="actor in model.actors">-->
+<!--{{actor.name}}<span ng-show=" ! $last ">,</span>-->
+<!--</span>-->
+<!--</p>-->
+
+<!--</td>-->
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->
+<!--</div>-->
+
+<ul class="pagination pagination-lg">
+    <li><a href="" ng-click="model.pagination(1)">1</a></li>
+    <li><a href="" ng-click="model.pagination(2)">2</a></li>
+    <li><a href="" ng-click="model.pagination(3)">3</a></li>
+    <li><a href="" ng-click="model.pagination(4)">4</a></li>
+    <li><a href="" ng-click="model.pagination(5)">5</a></li>
+</ul>

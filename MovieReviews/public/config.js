@@ -25,11 +25,21 @@
                 controller:'movieReviewCtrl',
                 controllerAs:'model'
             })
-            .when('/movie_list',{
-                templateUrl:'views/movie/templates/movie-list.view.client.html',
-                controller:'movieListCtrl',
+            .when('/theatremovie',{
+                templateUrl:'views/movie/templates/theatre-movie-list.view.client.html',
+                controller:'theatremovieListCtrl',
                 controllerAs:'model'
             })
+             .when('/coming-soon',{
+                 templateUrl:'views/movie/templates/upcoming-movie-list.view.client.html',
+                 controller:'upcomingmovieListCtrl',
+                 controllerAs:'model'
+             })
+             .when('/top-rated',{
+                 templateUrl:'views/movie/templates/top-rated-movie-list.view.client.html',
+                 controller:'topratedmovieListCtrl',
+                 controllerAs:'model'
+             })
             .when('/contactUs',{
                 templateUrl:'views/contact/templates/contact.view.client.html'
             })
