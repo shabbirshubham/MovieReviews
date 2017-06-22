@@ -57,12 +57,12 @@
                                 </label>
                             </div>
 
-                            <a type="submit"
-                               ng-click="model.login(username, password)"
+                            <button
+                               ng-click="login()"
                                class="btn btn-primary btn-block margin-top">
                                 <span class="fa fa-power-off"></span>
                                 Login
-                            </a>
+                            </button>
 
                             <a class="btn btn-success btn-block" data-dismiss="modal"
                                href="" data-target="#myRegisterModal" data-toggle="modal">
@@ -94,5 +94,5 @@
         </div>
     </div>
 
-    <div ng-include="'views/common/register.view.client.html'"></div>
+    <div ng-include="'views/common/templates/register.view.client.html'"></div>
 </div>

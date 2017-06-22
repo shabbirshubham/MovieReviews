@@ -370,6 +370,38 @@ input.ng-valid {
     margin-bottom: 0px;
 }
 
+<<<<<<< HEAD
+=======
+/*validation*/
+
+form[novalidate] input{
+    border-left-width: 8px ;
+    border-color: #3498db;
+    border-style: solid;
+}
+input[required]{
+    border-left-width: 8px ;
+    border-color: #3498db;
+    border-style: solid;
+}
+
+input[required].ng-pristine{
+    border-color: #e74c3c;
+}
+
+input.ng-invalid.ng-dirty{
+    border-color: #e74c3c;
+}
+
+
+input.ng-valid.ng-dirty{
+    border-color: #2ecc71;
+}
+h6.warning-text{
+    color:#e74c3c;
+}
+
+>>>>>>> 6f0324d9565a80301333a45c391233e1a8876743
 /*For star rating */
 
 
