@@ -86,6 +86,7 @@
                 controller: 'loginCtrl',
                  controllerAs:'model'
              })
+
         }
 
 
