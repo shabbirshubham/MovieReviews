@@ -21,7 +21,7 @@
                         <div class="form-group">
                             <label for="username1">Username</label>
                             <input type="text" id="username1" class="form-control"
-                                   placeholder="eg: debshubham"/>
+                                   placeholder="eg: debshubham" ng-model="model.username"/>
                         </div>
 
                         <div class="form-group margin-top">
@@ -29,7 +29,8 @@
                             <input type="password"
                                    id="password1"
                                    class="form-control"
-                                   placeholder="eg: abc123"/>
+                                   placeholder="eg: abc123"
+                                    ng-model="model.password"/>
                         </div>
 
                         <div class="form-group margin-top">
@@ -37,10 +38,11 @@
                             <input type="password"
                                    class="form-control"
                                    id="password2"
-                                   placeholder="type your above password again"/>
+                                   placeholder="type your above password again"
+                                    ng-model="model.vPassword"/>
                         </div>
 
-                        <a class="btn btn-primary btn-block margin-top">
+                        <a ng-click="model.register(model.username,model.password,model,vPassword)" class="btn btn-primary btn-block margin-top">
                             Register
                         </a>
 
@@ -55,6 +57,7 @@
                                 Close
                             </button>
                         </div>
+                    </form>
                 </div>
             </div>
         </div>

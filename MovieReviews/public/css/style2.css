@@ -370,7 +370,34 @@ input.ng-valid {
     margin-bottom: 0px;
 }
 
+/*validation*/
 
+form[novalidate] input{
+    border-left-width: 8px ;
+    border-color: #3498db;
+    border-style: solid;
+}
+input[required]{
+    border-left-width: 8px ;
+    border-color: #3498db;
+    border-style: solid;
+}
+
+input[required].ng-pristine{
+    border-color: #e74c3c;
+}
+
+input.ng-invalid.ng-dirty{
+    border-color: #e74c3c;
+}
+
+
+input.ng-valid.ng-dirty{
+    border-color: #2ecc71;
+}
+h6.warning-text{
+    color:#e74c3c;
+}
 
 /*For star rating */
 

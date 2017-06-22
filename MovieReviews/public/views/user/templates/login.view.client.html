@@ -1,0 +1,45 @@
+<div ng-include="'views/common/templates/site-header.view.client.html'">
+
+</div>
+
+<div class="main-body">
+    <div class="container">
+        <div class="page">
+            <div class="breadcrumbs">
+                <a href="#!home">Home</a>
+                <span>Profile</span>
+            </div>
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <h1>Login</h1>
+                        <div ng-show="login.message" class="alert alert-info"><h3> {{login.message}}</h3></div>
+                        <form name="loginForm" class="form-horizontal" action="#" novalidate>
+
+                            <label for="txtUsername">User Name</label>
+                            <input name="username" ng-model="login.username" class="form-control" id="txtUsername" type="text" placeholder="user name" required/>
+                            <div ng-show="loginForm.username.$error.required && loginForm.username.$dirty"><h6 class="warning-text">Required</h6></div>
+
+                            <label for="pwdPassword">Password</label>
+                            <input name="password" ng-model="login.password" id="pwdPassword" class="form-control" type="password" placeholder="password" required/>
+                            <div ng-show="loginForm.password.$dirty && loginForm.password.$error.required"><h6 class="warning-text">Required</h6></div>
+
+                            <input type="button" ng-disabled="loginForm.$invalid" ng-click="login.login(login.username,login.password)" s class="btn btn-info btn-block" value="Login" >
+                            <a class="btn btn-success btn-block" href="#!/register">Register</a>
+                            <a class="btn btn-danger btn-block" href="/auth/google">
+                                <span class="fa fa-google-plus"></span>
+                                Google Login</a>
+                            <a class="btn btn-primary btn-block" href="/auth/facebook">
+                                <span class="fa fa-facebook-f"></span>
+                                Facebook Login</a>
+                        </form>
+                    </div>
+                    <div class="col-xs-8">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,5 +1,5 @@
 <head>
-    <script src="../../js/jquery.js"></script>
+    <script src="../../../js/jquery.js"></script>
     <script type="text/javascript">
         jQuery(function ($) {
             $('#search-trigger').click(function () {
@@ -15,7 +15,7 @@
     </script>
 </head>
 
-
+<header>
 
 <div class="site-header">
     <div class="container">
@@ -93,7 +93,9 @@
                         </li>
                         <li><a href="#!/aboutUs">About</a></li>
                         <li><a href="#!/contactUs">Contact</a></li>
-                        <li><a  data-target="#myLoginModal" data-toggle="modal">Login</a></li>
+                        <!--<li ><a ng-click="showLoginModel()" data-target="#myLoginModal" data-toggle="modal" >Login</a></li>-->
+                        <li ><a href="#!/login">Login</a></li>
+                        <li>{{val}}</li>
                         <li class="navbar hidden-xs">
                             <form class="navbar-form form-search ngen-search-form">
                                 <div class="input-group ">
@@ -126,3 +128,5 @@
 
     </div>
 </div>
+<div ng-include="'views/common/templates/login.view.client.html'"></div>
+</header>
