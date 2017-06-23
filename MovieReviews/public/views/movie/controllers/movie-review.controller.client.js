@@ -51,7 +51,13 @@
             MovieService
                 .getVideo(model.movieId )
                 .then(function (video) {
-                    model.youtubeurl = "https://youtu.be/"+video.results[0].key;
+                    model.youtubeurl = getEmbedURL("https://youtu.be/"+video.results[0].key);
+                });
+
+            MovieService
+                .getReviewsByMovieId(model.movieId)
+                .then(function (response) {
+                   model.reviews = response.results;
                 });
 
             MovieService
@@ -71,6 +77,13 @@
                                     break;
                                 else{
                                     credits.cast[a].profile_path = poster_config_path + credits.cast[a].profile_path;
+                                    // console.log(getActorInfo(credits.cast[a].id));
+                                    // console.log(credits.cast[a].order);
+                                    // MovieService
+                                    //     .getActorInfo(credits.cast[a].id)
+                                    //     .then(function (response) {
+                                    //         credits.cast[a].order = response.biography;
+                                    //     });
                                     actors.push(credits.cast[a]);
                                 }
                             }
@@ -92,10 +105,16 @@
                             model.actors = actors;
                             model.writers = writers;
                         });
+
                         MovieService
                             .getMovie(model.movieId )
                             .then(function (response) {
                                         model.movie = response;
+                                        MovieService
+                                            .getReviewsByMovieName(model.movie.title)
+                                            .then(function (response) {
+                                                model.crticreviews = response.results;
+                                            });
                                         model.poster_path = poster_config_path + response.backdrop_path;
                                         model.title = response.original_title;
                                         arr = response.release_date.split("-");
@@ -116,12 +135,13 @@
                                         model.gross = moneyFormat(response.revenue,'$');
                                         model.tagline = response.tagline;
                             });
+
                     MovieService
                         .getSimilarMovies(model.movieId )
                         .then(function (movies) {
                             var movs = [];
                             for(m in movies.results){
-                                if(movs.length>5)
+                                if(movs.length>8)
                                     break;
                                 var similarmoviepath = poster_config_path + movies.results[m].poster_path;
                                 movies.results[m].poster_path = similarmoviepath;

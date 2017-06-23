@@ -15,6 +15,11 @@
                 controller:'homeCtrl',
                 controllerAs:'model'
             })
+             .when('/search/:movie',{
+                 templateUrl:'views/home/templates/movie-search-list.view.client.html',
+                 controller:'movieSearchCtrl',
+                 controllerAs:'model'
+             })
              .when('/movie/genre/:genreId',{
                  templateUrl:'views/movie/templates/movie-genre-list.view.client.html',
                  controller:'movieGenreCtrl',

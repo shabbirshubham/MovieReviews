@@ -54,8 +54,8 @@
 
 						</div>
 						<div class="col-md-6">
-                                <iframe width=100% height="300"
-                                        ng-src={{model.getEmbedURL(model.youtubeurl)}}
+                                <iframe width=100% height="250"
+                                        ng-src={{model.youtubeurl}}
                                         onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
                                         frameborder="0" allowfullscreen>
                                 </iframe>
@@ -65,9 +65,9 @@
                     <hr/>
                     <div class="content">
                         <div class="row">
-                            <div class="col-md-12">
+                            <p class="col-md-12">
                                 <span>{{model.overview}}</span>
-                            </div>
+                            </p>
                         </div>
                     </div>
 
@@ -105,57 +105,327 @@
 
                     <hr/>
 
-                    <!--<h1>User Reviews</h1>-->
-                    <!--<div class="content">-->
-                        <!--<div class="row">-->
-                            <!--<div class="col-md-12">-->
-                                <!--<div ng-repeat="review in model.reviews">-->
-                                    <!--<strong>{{review.author}}</strong>-->
-                                    <!--<p>{{review.content}}</p>-->
-                                    <!--See the full review at <a href={{review.url}}>HERE</a>.-->
-                                    <!--<hr/>-->
-                                <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    <h1>Critic Reviews</h1>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row" ng-repeat="review in model.crticreviews">
+
+                                    <div class="col-sm-5">
+                                        <img width="100%" height="auto" alt='No Image Found'
+                                             src="{{review.multimedia.src}}"/>
+                                    </div>
+
+                                    <div class="col-sm-7 col-xs-12">
+                                        <h3>
+                                            <strong>{{review.headline}}</strong>
+                                        </h3>
+                                        <h5><span>Published On: {{review.publication_date}}</span></h5>
+                                        <p>{{review.summary_short}}</p>
+                                        <a href={{review.link.url}}>{{review.link.suggested_link_text}}</a>.
+                                    </div>
+
+                                    <hr/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <hr/>
+
+                    <h1>User Reviews</h1>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div ng-repeat="review in model.reviews">
+                                    Reviewed By :<strong style="color: #003eff">{{review.author}}</strong>
+                                    <p style="word-wrap: break-word">{{review.content}}</p>
+                                    <span>See the full review at <a href={{review.url}}>HERE</a>.</span>
+                                    <hr/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <h1>Cast</h1>
                     <h2>Cast overview:</h2>
                     <div class="content">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Actor name</th>
-                                        <th>Role Played</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="active" ng-repeat="actor in model.actors" class="col-md-12">
-                                    <td>
-                                        <img  height="100" ng-src={{actor.profile_path}}
-                                             onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
-                                        </td>
-                                    <td>{{actor.name}}</td>
-                                    <td>{{actor.character}}</td>
-                                </tr>
-                                </tbody>
-                            </table>
+
+                        <div class="row" style="border: 3px solid slategray">
+                            <div style="margin: 0;" class="col-sm-2 hidden-xs"><span style="font-size: 20px"></span></div>
+                            <div style="margin: 0;" class="col-sm-2 col-xs-6"><span style="font-size: 20px">Actor</span></div>
+                            <div style="margin: 0;" class="col-sm-2 col-xs-6"><span style="font-size: 20px">Name</span></div>
+                            <div style="margin: 0;" class="col-sm-2 hidden-xs"><span style="font-size: 20px">Played</span></div>
                         </div>
+
+                        <div class="row" style="border: 3px solid slategray">
+                                <div style="margin-top: 5px " ng-repeat="actor in model.actors" class="col-xs-12">
+                                    <div class="col-sm-2 hidden-xs">
+                                        <span>{{actor.order+1}}</span>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-6">
+                                        <img class="img-circle" height="100" ng-src={{actor.profile_path}}
+                                             onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                    </div>
+                                    <div class="col-sm-2 col-xs-6">
+                                        <span>{{actor.name}}</span>
+                                    </div>
+
+                                    <div class="col-sm-2 hidden-xs">
+                                        <span>{{actor.character}}</span>
+                                    </div>
+                                </div>
+                        </div>
+
                     </div>
 
                     <hr/>
                     <h2>People who liked this also liked... </h2>
-                    <div class="content">
-                        <div class="row">
-                            <div ng-repeat="movie in model.similarmovies" class="col-md-4">
-                                <a href="#!movie/{{movie.id}}">
-                                    <img ng-src="{{movie.poster_path}}"
-                                         onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
-                                    <h3>{{movie.original_title}} <span> {{movie.vote_average}}<span style="margin-left: 10px" class="fa fa-star"></span></span> </h3>
+                    <div class="row">
+
+                        <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                            <div id="mobileImageCarousel" class="carousel slide" data-interval="2000"
+                                 data-ride="carousel" data-pause="hover" data-wrap="true">
+
+                                <ol class="carousel-indicators">
+                                    <li data-target="#mobileImageCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#mobileImageCarousel" data-slide-to="1"></li>
+                                    <li data-target="#mobileImageCarousel" data-slide-to="2"></li>
+                                    <li data-target="#mobileImageCarousel" data-slide-to="3"></li>
+                                    <li data-target="#mobileImageCarousel" data-slide-to="4"></li>
+                                    <li data-target="#mobileImageCarousel" data-slide-to="5"></li>
+                                    <li data-target="#mobileImageCarousel" data-slide-to="6"></li>
+                                    <li data-target="#mobileImageCarousel" data-slide-to="7"></li>
+                                    <li data-target="#mobileImageCarousel" data-slide-to="8"></li>
+                                </ol>
+
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <a href="#!movie/{{model.similarmovies[0].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[0].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Desert</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[0].vote_average}}></p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#!movie/{{model.similarmovies[1].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[1].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Jellyfish</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[1].vote_average}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#!movie/{{model.similarmovies[2].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[2].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Lighthouse</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[2].vote_average}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#!movie/{{model.similarmovies[3].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[3].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Penguins</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[3].vote_average}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#!movie/{{model.similarmovies[4].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[4].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Penguins</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[4].vote_average}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#!movie/{{model.similarmovies[5].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[5].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Penguins</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[5].vote_average}}</p>
+                                        </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#!movie/{{model.similarmovies[6].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[6].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Penguins</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[6].vote_average}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#!movie/{{model.similarmovies[7].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[7].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Penguins</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[7].vote_average}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="#!movie/{{model.similarmovies[8].id}}" target="_blank">
+                                            <img src="{{model.similarmovies[8].poster_path}}" class="no-pad-bottom img-responsive">
+                                            <div class="carousel-caption">
+                                                <!--<h3>Penguins</h3>-->
+                                                <p style="color: white">RATING:  {{model.similarmovies[8].vote_average}}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <a href="#mobileImageCarousel" class="carousel-control left" target="_self" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </a>
+                                <a href="#mobileImageCarousel" class="carousel-control right" target="_self" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
                                 </a>
                             </div>
+
+                        </div>
+
+
+                        <div class="col-sm-12 hidden-xs">
+
+                            <div id="imageCarousel" class="carousel slide" data-interval="2000"
+                                 data-ride="carousel" data-pause="hover" data-wrap="true">
+
+                                <ol class="carousel-indicators">
+                                    <li data-target="#imageCarousel" data-slide-to="0" class="active"></li>
+                                    <li data-target="#imageCarousel" data-slide-to="1"></li>
+                                    <li data-target="#imageCarousel" data-slide-to="2"></li>
+                                </ol>
+
+                                <div class="carousel-inner">
+                                    <div class="item active">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[0].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[0].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span style="color: white">{{model.similarmovies[0].original_title}}</span>-->
+                                                        <p style="color: white">RATING:  {{model.similarmovies[0].vote_average}}
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[1].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[1].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span style="color: white">{{model.similarmovies[1].original_title}}</span>-->
+                                                        <p style="color: white">RATING: {{model.similarmovies[1].vote_average}}
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[2].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[2].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span style="color: white">{{model.similarmovies[2].original_title}}</span>-->
+                                                        <p style="color: white">RATING: {{model.similarmovies[2].vote_average}}
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[3].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[3].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span>{{model.similarmovies[3].original_title}}</span>-->
+                                                        <p style="color: white">RATING:  {{model.similarmovies[3].vote_average}}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[4].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[4].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span>{{model.similarmovies[4].original_title}}</span>-->
+                                                        <p style="color: white">RATING:  {{model.similarmovies[4].vote_average}}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[5].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[5].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span>{{model.similarmovies[5].original_title}}</span>-->
+                                                        <p style="color: white">RATING:  {{model.similarmovies[5].vote_average}}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="item">
+                                        <div class="row">
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[6].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[6].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span>{{model.similarmovies[6].original_title}}</span>-->
+                                                        <p style="color: white">RATING:  {{model.similarmovies[6].vote_average}}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[7].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[7].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span>{{model.similarmovies[7].original_title}}</span>-->
+                                                        <p style="color: white">RATING:  {{model.similarmovies[7].vote_average}}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-4">
+                                                <a href="#!movie/{{model.similarmovies[8].id}}" target="_blank">
+                                                    <img src="{{model.similarmovies[8].poster_path}}" class="no-pad-bottom img-responsive">
+                                                    <div class="carousel-caption">
+                                                        <!--<span>{{model.similarmovies[8].original_title}}</span>-->
+                                                        <p style="color: white">RATING:  {{model.similarmovies[8].vote_average}}
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <a href="#imageCarousel" class="carousel-control left" data-slide="prev" target="_self">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                </a>
+                                <a href="#imageCarousel" class="carousel-control right" data-slide="next" target="_self">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </a>
+                            </div>
+
                         </div>
                     </div>
+
+                        <!--<div class="row">-->
+                            <!--<div ng-repeat="movie in model.similarmovies" class="col-md-4">-->
+                                <!--<a href="#!movie/{{movie.id}}">-->
+                                    <!--<img ng-src="{{movie.poster_path}}" height="200"-->
+                                         <!--onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">-->
+                                    <!--<h3>{{movie.original_title}} <span> {{movie.vote_average}}<span style="margin-left: 10px" class="fa fa-star"></span></span> </h3>-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
                     <hr/>
                     <h2>Details</h2>
