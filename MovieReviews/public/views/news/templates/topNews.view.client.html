@@ -15,9 +15,13 @@
 	<main class="main-body">
 		<div class="container">
 			<div class="page">
-				<div class="breadcrumbs">
-					<a href="#!home">Home</a>
-					<span>News</span>
+				<div >
+					<ol class="breadcrumb">
+						<li><a href="#!/home">Home</a></li>
+						<li class="active" >News</li>
+						<li class="active" >Top News</li>
+
+					</ol>
 				</div>
 
 				<div class="content">
@@ -28,7 +32,7 @@
 							<img class="img-responsive" src="{{news.fields.thumbnail}}" style="float:left; margin-bottom: 10px ">
 							</div>
 							<div class="col-sm-8">
-								<a href="{{news.fields.shortUrl}}"><h3 class="section-title text-left "  >{{news.webTitle}}</h3></a>
+								<a ng-click="model.redirectTo(news.fields.shortUrl)"><h3 class="section-title text-left "  >{{news.webTitle}}</h3></a>
 								<p class="text-left hidden-xs">{{news.fields.trailText}}</p>
 								<h6>-{{news.fields.byline}}</h6>
 							</div>
@@ -36,7 +40,7 @@
 
 						</div>
 						<div class=" hidden-lg hidden-md hidden-sm" >
-							<a href="{{news.fields.shortUrl}}" >
+							<a ng-click="model.redirectTo(news.fields.shortUrl)" >
 								<img class="img-responsive" src="{{news.fields.thumbnail}}" style="float:left; margin-right: 8px; margin-bottom: 20px; max-height: 80%">
 								<h1 class="section-title text-left hidden-lg hidden-md hidden-sm" style="font-size: 22px" >
 									{{news.webTitle}}

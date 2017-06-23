@@ -1,0 +1,21 @@
+<div class="profile-header row">
+    <div class="col-xs-12">
+        <div id="user-picture">
+            <img id="avatar" style="height: 145px;width: 120px" class="image"
+                 src="https://images-na.ssl-images-amazon.com/images/M/MV5BMjQ4MTY5NzU2M15BMl5BanBnXkFtZTgwNDc5NTgwMTI@._V1_SY100_SX100_.jpg">
+            <!--<div class="fake"><span><a href>Link!</a><input type='file' /><span>-->
+            <div>
+                <!--<label style="color:blue;cursor: pointer;" for="input">Edit</label>-->
+
+            </div>
+        </div>
+        <div id="user-details">
+            <h1>{{model.user.username}}</h1>
+            <label for="user-avatar" style="color: blue;cursor: pointer">Change profile pictures</label>
+            <input id="user-avatar" style="display: none" type="file" file-input="files" />
+            <ul>
+                <li ng-repeat="file in files">{{file.name}}</li>
+            </ul>
+        </div>
+    </div>
+</div>

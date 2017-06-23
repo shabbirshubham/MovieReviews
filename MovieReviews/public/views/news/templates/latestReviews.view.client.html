@@ -7,9 +7,13 @@
 	<main class="main-body">
 		<div class="container">
 			<div class="page">
-				<div class="breadcrumbs">
-					<a href="#!/home">Home</a>
-					<span>News -> Latest Reviews</span>
+				<div >
+					<ol class="breadcrumb">
+						<li><a href="#!/home">Home</a></li>
+						<li class="active" >News</li>
+						<li class="active" >Latest Reviews</li>
+
+					</ol>
 				</div>
 
 				<div class="content">
@@ -20,7 +24,7 @@
 							<img class="img-responsive" src="{{review.fields.thumbnail}}" style="float:left; margin-bottom: 10px ">
 							</div>
 							<div class="col-sm-8">
-								<a href="{{review.fields.shortUrl}}"><h3 class="list-title text-left "  >{{review.webTitle}}</h3></a>
+								<a ng-click="model.redirectTo(review.fields.shortUrl)"><h3 class="list-title text-left "  >{{review.webTitle}}</h3></a>
 								<div class="star-ratings-css">
 									<div class="star-ratings-css-top" ng-style="{'width':{{review.fields.starRating}}*(100/5)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
 									<div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
@@ -33,7 +37,7 @@
 
 						</div>
 						<div class=" hidden-lg hidden-md hidden-sm" >
-							<a href="{{review.fields.shortUrl}}" >
+							<a ng-click="model.redirectTo(review.fields.shortUrl)" >
 								<img class="img-responsive" src="{{review.fields.thumbnail}}" style="float:left; margin-right: 8px; margin-bottom: 20px; max-height: 80%">
 								<h1 class="list-title text-left hidden-lg hidden-md hidden-sm" style="font-size: 22px" >
 									{{review.webTitle}}

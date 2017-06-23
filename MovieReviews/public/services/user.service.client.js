@@ -13,7 +13,7 @@
             // this.findUserByEmail=findUserByEmail;
             this.findUserByUsername=findUserByUsername;
             this.logout=logout;
-            this.checkLoggedin=checkLoggedin;
+            this.checkLoggedIn=checkLoggedIn;
             this.updateUser=updateUser;
             this.createUser=createUser;
 
@@ -38,7 +38,7 @@
             }
             
             function deleteUser(userId) {
-                var url = "/api/project/user/"+userId;
+                var url = "/api/project/deleteUser/"+userId;
                 return $http.delete(url)
                     .then(function (response) {
                         return response.data;
@@ -48,7 +48,7 @@
             }
             
             function findUserByUsername(username) {
-                var url = "/api/project/user?username="+username;
+                var url = "/api/project/findUserByUsername?username="+username;
                 return $http.get(url)
                     .then(function (response) {
                         return response.data;
@@ -63,7 +63,7 @@
                     });
             }
             
-            function checkLoggedin() {
+            function checkLoggedIn() {
                 var url = "/api/project/checkLoggedIn";
                 return $http.get(url)
                     .then(function (response) {
@@ -72,7 +72,7 @@
             }
 
             function updateUser(userId,user) {
-                var url = "/api/project/user/"+userId;
+                var url = "/api/project/updateUser/"+userId;
                 return $http.put(url,user)
                     .then(function (response) {
                         return response.data;

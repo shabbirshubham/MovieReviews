@@ -6,7 +6,7 @@
 
 (function () {
     angular
-        .module("WDP",['ngRoute','angularModalService']);
+        .module("WDP",['ngRoute']);
 
 
 })();

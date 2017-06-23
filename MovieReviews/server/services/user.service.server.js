@@ -19,7 +19,7 @@
 
         app.post('/api/project/login',passport.authenticate('local'),login);
         app.post('/api/project/register',register);
-        app.get('/api/project/checkLoggedinUser',checkLoggedinUser);
+        app.get('/api/project/checkLoggedIn',checkLoggedIn);
         app.post('/api/project/logout',logout);
         app.put('/api/project/updateUser',updateUser);
         app.get('/api/project/findUserByUsername',findUserByUsername);
@@ -95,7 +95,7 @@
                 })
         }
 
-        function checkLoggedinUser(req,res) {
+        function checkLoggedIn(req,res) {
                 res.send(req.isAuthenticated()? req.user:'0');
         }
 
@@ -115,7 +115,7 @@
         }
 
         function findUserByUsername(req,res) {
-                var username = req.params.username;
+                var username = req.query.username;
                 userModel
                     .findUserByUsername(username)
                     .then(function (user) {

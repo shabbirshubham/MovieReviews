@@ -10,12 +10,11 @@ var userSchema = mongoose.Schema({
     email: String,
     imgUrl: String,
     phone: String,
-    likes: [{type: mongoose.Schema.Types.ObjectId, ref: 'RateMyMovieMovie'}],
-    movieReviews: [{type: mongoose.Schema.ObjectId, ref:'MovieReviewModel'}],
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'}],
     following: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'}],
     role: {type: String, enum: ['user','fan','critic', 'admin'], default: 'user'},
     watchList:[{type:String}],
+    reviews: [{type: mongoose.Schema.ObjectId,ref:'ReviewModel'}],
     dateCreated: {type: Date, default: Date.now()}
 },{collection:'user'});
 

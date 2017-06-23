@@ -3,10 +3,22 @@
     angular.module('WDP')
         .controller('topNewsCtrl',topNewsCtrl);
     
-    function topNewsCtrl($http) {
+    function topNewsCtrl($http,isLoggedIn,UserService,$location,$window) {
 
         var model = this;
-
+        model.isLoggedIn=isLoggedIn;
+        model.logout = logout;
+        model.redirectTo=redirectTo;
+        function redirectTo(url) {
+            $window.open(url);
+        }
+        function logout() {
+            UserService
+                .logout()
+                .then(function () {
+                    $location.url('/');
+                });
+        }
         //var url ='http://newsapi.org/v1/articles?source=techcrunch&apiKey=e652550722294cb5b5ef87e76ae5e2f3';
         var url ='http://content.guardianapis.com/search?&format=json&tag=film/film,tone/news&show-fields=trailText,byline,thumbnail,shortUrl&from-date=2017-06-01&&order-by=newest&api-key=d5457e48-805f-4353-aca6-32df568fab15';
         function init() {
