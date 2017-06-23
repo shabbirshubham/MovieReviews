@@ -86,7 +86,24 @@
                 controller: 'loginCtrl',
                  controllerAs:'model'
              })
-
+             .when('/user/account',{
+                 templateUrl:'views/user/templates/account-settings.view.client.html',
+                 controller: 'profileCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
+             })
+             .when('/user/watchlist',{
+                 templateUrl:'views/user/templates/watchlist.view.client.html',
+                 controller: 'profileCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
+             })
+             .when('/user/user_reviews',{
+                 templateUrl:'views/user/templates/user-reviews.view.client.html',
+                 controller: 'profileCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
+             })
         }
 
 

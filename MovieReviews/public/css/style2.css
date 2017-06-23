@@ -521,6 +521,32 @@ h3.login-register-error{
     left: auto;
 }
 
+
+#user-picture {
+    float: left;
+    padding: 1px;
+    margin: 0 5px 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    width: 120px;
+    height: 150px;
+    background: #eee;
+}
+#avatar{
+    margin-bottom: 0px;
+}
+#user-details{
+    display: inline-block;
+    margin-left: 10px;
+}
+
+
+
+
+input{
+    margin-bottom: 5px;
+}
+
 @media (max-width: 1197px){
     .navbar-header {
         float: none;
@@ -559,6 +585,27 @@ h3.login-register-error{
     }
 }
 
+.fake {
+}
+.fake span {
+    cursor: pointer;
+}
+
+.fake a {
+    position: relative;
+    overflow: hidden;
+}
+
+.fake span:hover a {
+    color: red;
+}
+
+.fake a + input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
 
 
 

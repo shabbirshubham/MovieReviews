@@ -15,6 +15,8 @@ userModel.updateUser=updateUser;
 userModel.findUserById=findUserById;
 userModel.findUserByGoogleId = findUserByGoogleId;
 userModel.findUserByFacebookId = findUserByFacebookId;
+userModel.addReview = addReview;
+userModel.deleteReview=deleteReview;
 //----------------------------------------------------------
 module.exports = userModel;
 //--------------------------------------------------------
@@ -55,4 +57,23 @@ function findUserByGoogleId(googleId) {
 
 function findUserByFacebookId(facebookId) {
     return userModel.findOne({'facebook.id': facebookId});
+}
+
+function addReview(userId,reviewId) {
+    return userModel
+        .findById(userId)
+        .then(function (user) {
+            user.reviews.push(reviewId);
+            return user.save();
+        })
+}
+
+function deleteReview(userId,reviewId) {
+    return userModel
+        .findById(userId)
+        .then(function (user) {
+            var index = user.reviews.indexOf(reviewId);
+            user.reviews.splice(index,1);
+            return user.save();
+        })
 }

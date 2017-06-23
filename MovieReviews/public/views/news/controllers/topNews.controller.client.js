@@ -3,11 +3,15 @@
     angular.module('WDP')
         .controller('topNewsCtrl',topNewsCtrl);
     
-    function topNewsCtrl($http,isLoggedIn,UserService,$location) {
+    function topNewsCtrl($http,isLoggedIn,UserService,$location,$window) {
 
         var model = this;
         model.isLoggedIn=isLoggedIn;
         model.logout = logout;
+        model.redirectTo=redirectTo;
+        function redirectTo(url) {
+            $window.open(url);
+        }
         function logout() {
             UserService
                 .logout()

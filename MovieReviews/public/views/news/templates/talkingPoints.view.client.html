@@ -25,7 +25,7 @@
 							<img class="img-responsive" src="{{talkingPoint.fields.thumbnail}}" style="float:left; margin-bottom: 10px ">
 							</div>
 							<div class="col-sm-8">
-								<a href="{{talkingPoint.fields.shortUrl}}"><h3 class="section-title text-left "  >{{talkingPoint.webTitle}}</h3></a>
+								<a ng-click="model.redirectTo(talkingPoint.fields.shortUrl)"><h3 class="section-title text-left "  >{{talkingPoint.webTitle}}</h3></a>
 								<p class="text-left hidden-xs">{{talkingPoint.fields.trailText}}</p>
 								<h6>-{{talkingPoint.fields.byline}}</h6>
 							</div>
@@ -33,7 +33,7 @@
 
 						</div>
 						<div class=" hidden-lg hidden-md hidden-sm" >
-							<a href="{{talkingPoint.fields.shortUrl}}" >
+							<a ng-click="model.redirectTo(talkingPoint.fields.shortUrl)" >
 								<img class="img-responsive" src="{{talkingPoint.fields.thumbnail}}" style="float:left; margin-right: 8px; margin-bottom: 20px; max-height: 80%">
 								<h1 class="section-title text-left hidden-lg hidden-md hidden-sm" style="font-size: 22px" >
 									{{talkingPoint.webTitle}}

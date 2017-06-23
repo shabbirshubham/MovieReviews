@@ -3,11 +3,15 @@
     angular.module('WDP')
         .controller('talkingPointsCtrl',talkingPointsCtrl);
     
-    function talkingPointsCtrl($http,isLoggedIn,UserService,$location) {
+    function talkingPointsCtrl($http,isLoggedIn,UserService,$location,$window) {
 
         var model = this;
         model.isLoggedIn=isLoggedIn;
         model.logout = logout;
+        model.redirectTo=redirectTo;
+        function redirectTo(url) {
+            $window.open(url);
+        }
         function logout() {
             UserService
                 .logout()
