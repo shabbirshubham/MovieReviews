@@ -96,7 +96,7 @@ model.logout = logout;
                             var writers = [];
                             var actors = [];
                             for(a in credits.cast){
-                                if(actors.length>3)
+                                if(actors.length>15)
                                     break;
                                 else{
                                     credits.cast[a].profile_path = poster_config_path + credits.cast[a].profile_path;
