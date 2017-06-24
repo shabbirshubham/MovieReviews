@@ -1,0 +1,225 @@
+<div ng-include="'views/common/templates/site-header.view.client.html'">
+
+</div>
+
+
+	<div class="main-body">
+		<div class="container">
+			<div class="page">
+				<!--<div class="breadcrumbs">-->
+
+					<!--<a href="../../../index.html">Home</a>-->
+
+					<!--<a href="movie-list.view.client.html">Movie Review</a>-->
+					<!--<span>The Croods</span>-->
+				<!--</div>-->
+
+				<!-- Main Body -->
+                <h1 class="text-center ">
+                    <strong><a class="section-title" href={{model.homepage}}>{{model.title}}</a>
+                    </strong>
+                </h1>
+                <h1 class="text-center"><strong>({{model.releaseyear}})</strong>
+                    <span style="display: inline;padding-left: 30px">
+                        <img ng-src="../../../images/stars.png"/>
+                        <span>{{model.averagevote}}
+                            <span style="font-size:15px">/10 ({{model.votes}})
+                            </span>
+                        </span>
+                    </span>
+                </h1>
+                <h5 class="text-center">
+                    <span style="text-decoration: underline"> Runtime</span>
+                    :{{model.hour}}h {{model.minutes}}min |
+                    <span style="text-decoration: underline"> Genre:</span>
+                       <ol id="genrelist" style="display: inline">
+                            <li ng-repeat="genre in model.genres">
+                                {{genre.name}}
+                            </li>
+                       </ol> |
+                    <span>
+                        <span style="text-decoration: underline">Released on</span>:
+                        {{model.releasedate | date:'fullDate'}}
+                    </span>
+                </h5>
+
+                <hr/>
+				<div class="content">
+					<div class="row">
+						<div class="col-md-6">
+                                <figure class="movie-poster">
+                                    <img ng-src={{model.poster_path}}
+                                         onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                </figure>
+
+						</div>
+						<div class="col-md-6">
+                                <iframe width=100% height="300"
+                                        ng-src={{model.getEmbedURL(model.youtubeurl)}}
+                                        onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                        frameborder="0" allowfullscreen>
+                                </iframe>
+						</div>
+                    </div>
+
+                    <hr/>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span>{{model.overview}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong>Directors:</strong>
+                                <span ng-repeat="director in model.directors">
+                                {{director}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong>Actors:</strong>
+                                <span ng-repeat="actor in model.actors">
+                                {{actor.name}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <strong>Writers:</strong>
+                                <span ng-repeat="writer in model.writers">
+                                {{writer}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <!--<h1>User Reviews</h1>-->
+                    <!--<div class="content">-->
+                        <!--<div class="row">-->
+                            <!--<div class="col-md-12">-->
+                                <!--<div ng-repeat="review in model.reviews">-->
+                                    <!--<strong>{{review.author}}</strong>-->
+                                    <!--<p>{{review.content}}</p>-->
+                                    <!--See the full review at <a href={{review.url}}>HERE</a>.-->
+                                    <!--<hr/>-->
+                                <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <h1>Cast</h1>
+                    <h2>Cast overview:</h2>
+                    <div class="content">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Actor name</th>
+                                        <th>Role Played</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="active" ng-repeat="actor in model.actors" class="col-md-12">
+                                    <td>
+                                        <img  height="100" ng-src={{actor.profile_path}}
+                                             onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                        </td>
+                                    <td>{{actor.name}}</td>
+                                    <td>{{actor.character}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <h2>People who liked this also liked... </h2>
+                    <div class="content">
+                        <div class="row">
+                            <div ng-repeat="movie in model.similarmovies" class="col-md-4">
+                                <a href="#!movie/{{movie.id}}">
+                                    <img ng-src="{{movie.poster_path}}"
+                                         onerror="this.src='http://i.amz.mshcdn.com/EcodAVAlQrEOPy8QfgBFO-vZP0M=/fit-in/850x850/http%3A%2F%2Fmashable.com%2Fwp-content%2Fgallery%2Fentertaining-404-error-pages%2Fchrisjennings.jpg';">
+                                    <h3>{{movie.original_title}} <span> {{movie.vote_average}}<span style="margin-left: 10px" class="fa fa-star"></span></span> </h3>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <h2>Details</h2>
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                <strong>HomePage:</strong>
+                                <span><a href="{{model.homepage}}">{{model.homepage}}</a></span>
+                                </p>
+
+                                <p>
+                                <strong>Tagline:</strong>
+                                <span>{{model.tagline}}</span>
+                                </p>
+
+                                <p>
+                                <strong>Movie Status:</strong>
+                                <span>{{model.status}}</span>
+                                </p>
+
+                                <p>
+                                <strong>Budget:</strong>
+                                <span>{{model.budget}}</span>
+                                </p>
+
+                                <p>
+                                <strong>Gross Revenue:</strong>
+                                <span>{{model.gross}}</span>
+                                </p>
+
+                                <p>
+                                <strong>Country:</strong>
+                                <span ng-repeat="country in model.countries">
+                                {{country.name}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                                <p>
+
+                                <p>
+                                <strong>Languages:</strong>
+                                <span ng-repeat="language in model.languages">
+                                {{language.name}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                                </p>
+
+                                <p>
+                                <strong>Company Credits:</strong>
+                                <span ng-repeat="company in model.companies">
+                                {{company.name}}<span ng-show=" ! $last ">,</span>
+                                </span>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+			</div>
+		</div> <!-- .container -->
+	</div>
+
+	<div ng-include="'views/common/templates/footer.view.client.html'"></div>
+
+    </div>
+
+
+	<script src="../../../js/jquery-1.11.1.min.js"></script>
+	<script src="../../../js/plugins.js"></script>
+	<script src="../../../js/app.js"></script>

@@ -21,26 +21,68 @@
                     <!--<h2>Profile page</h2>-->
                     <div class="col-sm-8">
                         <div class="profile-section row">
-                            <h1 class="profile-section-header">Your Watch list</h1>
-                           <div ng-show="model.user.wachlist" class="row image-list">
-                                <div class="col-xs-4"><img src="" alt="image 1"></div>
-                                <div class="col-xs-4"><img src="" alt="image 1"></div>
-                                <div class="col-xs-4"><img src="" alt="image 1"></div>
+                            <h1 class="profile-section-header"><a href="#!/user/watchlist">Your Watch list</a></h1>
+                           <div ng-show="model.movies" class="row image-list">
+                                <a href="#!/user/watchlist">
+                                    <div class="col-xs-4"><img src="{{model.movies[0].poster_path}}" alt="image 1">
+                                    </div>
+                                </a>
+                                <div ng-show="model.movies[1].poster_path" class="col-xs-4">
+                                    <img src="{{model.movies[1].poster_path}}" alt="image 2">
+                                </div>
+                                <div ng-show="model.movies[2].poster_path" class="col-xs-4">
+                                    <img src="{{model.movies[2].poster_path}}" alt="image 3">
+                                </div>
                            </div>
-                            <div class="see-more" ng-show="model.user.watchlist">
+
+                            <div class="see-more" ng-show="model.movies">
                                 <h5><span><a href="#!/user/watchlist">See all >></a></span></h5>
                             </div>
-                            <div>
+                            <div ng-hide="model.movies">
                                 <p>Your watchlist is empty. Find and keep track of interesting things to watch!</p>
                             </div>
 
                         </div>
-                        <div class="profile-section">
+
+                        <div ng-show="model.userreviews" class="profile-section">
+                            <h1 class="profile-section-header"><a href="#!/user/user_reviews">You reviewed {{model.userreviews.length}} movies</a></h1>
+                            <p>See all your reviews <a href="#!/user/user_reviews">here</a></p>
+                        </div>
+
+                        <div ng-hide="model.userreviews" class="profile-section">
                             <h1 class="profile-section-header">Your Reviews</h1>
                             <p>Loved or hated a movie or TV show? Write a review and share it with others!</p>
                         </div>
-                        <div class="profile-section">
-                            <h1 class="profile-section-header">Your Something extra</h1>
+
+                        <div class="profile-section" ng-hide="model.likedmovies">
+                            <p>Like a movie to see your movie preferences!!!</p>
+                        </div>
+
+                        <div class="profile-section" ng-show="model.likedmovies">
+                            <h1 class="profile-section-header"><a href="#!/user/likedmovies">Your Likes</a></h1>
+                            <p>You liked
+                                <a href="#!/movie/{{model.likedmovies[0].id}}">
+                                    <span style="color: #b92c28">{{model.likedmovies[0].title}}</span>
+                                </a>
+                                <span ng-show="model.likedmovies.length>1">
+                                and
+                                <a href="#!/user/likedmovies" style="color: #b92c28">{{model.likedmovies.length-1}}</a> more
+                                </span>
+                            </p>
+                        </div>
+
+<div class="profile-section">
+                            <h1 class="profile-section-header">Your Followers</h1>
+                            <div ng-show="model.user.followers.length ===0">
+                                <p>Currently you don't have any followers.</p>
+                            </div>
+                            <div ng-show="model.user.followers.length!==0">
+                                <ul>
+                                    <li>
+
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-4 hidden-xs">
@@ -48,10 +90,11 @@
                                 <div class="profile-section side-bar-section">
                                     <h1 class="profile-section-header">Quick Links</h1>
                                     <ul>
-                                        <li><span><a>Your account</a></span></li>
-                                        <li><span><a>Your account</a></span></li>
-                                        <li><span><a>Your account</a></span></li>
-                                        <li><span><a>Your account</a></span></li>
+                                        <li style="margin-bottom: 10px"><span><a href="#!/user/account">Your account</a></span></li>
+                                        <li style="margin-bottom: 10px"><span><a>Reviews</a></span></li>
+                                        <li style="margin-bottom: 10px"><span><a>Watchlist</a></span></li>
+                                        <li style="margin-bottom: 10px"><span><a>Followers</a></span></li>
+                                        <li style="margin-bottom: 10px"><span><a>Likes</a></span></li>
 
                                     </ul>
                                 </div>

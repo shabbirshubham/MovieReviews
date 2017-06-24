@@ -3,12 +3,11 @@
         .module('WDP')
         .controller('homeCtrl',homeCtrl);
     
-    function homeCtrl($routeParams,UserService,$location,MovieService,isLoggedIn) {
+    function homeCtrl($routeParams,UserService,$location,MovieService,isLoggedIn,$http) {
         var model = this;
         // model.searchMovie = searchMovie;
 
-        // model.isLoggedIn=isLoggedIn;
-        model.login = login;
+        model.user=model.isLoggedIn=isLoggedIn;
         model.logout = logout;
         function logout() {
             UserService
@@ -17,43 +16,22 @@
                     $location.url('/');
                 });
         }
-        function login(username,password) {
-            // var found = userService.findUserByCredentials(username,password);
 
-            if(username === undefined || password === undefined) {
-                if (username === undefined) {
-                    model.usernamealert = true;
-                    model.error = true;
-                }
-                else{
-                    model.usernamealert = false;
-                }
-                if (password === undefined) {
-                    model.passwordalert = true;
-                    model.error = true;
-                }
-                else{
-                    model.passwordalert = false;
-                }
-                model.message = false;
-                return;
-            }
+        var url ='http://content.guardianapis.com/search?&format=json&tag=film/film,tone/reviews&show-fields=trailText,byline,thumbnail,shortUrl,starRating,publication&from-date=2017-06-01&&order-by=newest&api-key=d5457e48-805f-4353-aca6-32df568fab15';
+        function init() {
+            $http
+                .get(url)
+                .then(function (response) {
+                    console.log(response);
+                    //model.allNews=response.data.articles;
+                    model.newsReviews = response.data.response.results;
 
-            model.usernamealert = false;
-            model.passwordalert = false;
+                    //model.allNews.webPublicationDate = model.allNews.webPublicationDate.toUTCString();
+                })
 
-            UserService
-                .login(username,password)
-                .then(function (user) {
-                    if(user!="" || user!=null) {
-                        model.error = false;
-                        model.message = false;
-                        $location.url('/home/user');
-                    }
-                },function (err) {
-                    model.error = true;
-                    model.message = "Invalid credentials";
-                });
+        }init();
+
+        function search(query) {
         }
         // function searchMovie(query) {
         //     $location.url('/search/' + query);

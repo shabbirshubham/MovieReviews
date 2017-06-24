@@ -4,11 +4,24 @@
             .module("WDP")
             .controller('movieSearchCtrl', movieSearchCtrl);
 
-        function movieSearchCtrl(MovieService, $location, $routeParams, $sce) {
+        function movieSearchCtrl(UserService,MovieService, $location, $routeParams, $sce,isLoggedIn,$route) {
             var model = this;
             model.pagination = pagination;
             model.query = $routeParams.movie;
             model.search = search;
+            model.isLoggedIn = isLoggedIn;
+            model.bookmark = bookmark;
+            model.removebookmark = removebookmark;
+            model.likeMovie = likeMovie;
+            model.unlikeMovie = unlikeMovie;
+model.logout = logout;
+            function logout() {
+                UserService
+                    .logout()
+                    .then(function () {
+                        $location.url('/');
+                    });
+            }
 
             function init() {
 
@@ -24,8 +37,109 @@
                                 getMovieInfo(response, poster_config_path);
                             });
                     });
+
+                UserService
+                    .getMoviesFromWatchList(isLoggedIn._id)
+                    .then(function (movies) {
+                        var movieIds = [];
+                        for(m in movies)
+                            movieIds.push(movies[m].id);
+                        model.watchListMovies = movieIds;
+                    });
+
+                UserService
+                    .getLikedMovies(isLoggedIn._id)
+                    .then(function (movies) {
+                        var movieIds = [];
+                        for(m in movies)
+                            movieIds.push(movies[m].id);
+                        model.likedMovies = movieIds;
+                    })
             }
             init();
+
+            function bookmark(movieId) {
+                UserService
+                    .checkLoggedIn()
+                    .then(function (user) {
+                        if(user === "0"){
+                            $location.url('/login');
+                        }
+                        else{
+                            MovieService
+                                .getConfig()
+                                .then(function (configs) {
+                                    var baseURL = configs.images.secure_base_url + "";
+                                    var size = configs.images.profile_sizes[2];
+                                    var poster_config_path = baseURL + size;
+                                    MovieService
+                                        .getMovie(movieId)
+                                        .then(function (movie) {
+                                            movie.poster_path = poster_config_path + movie.poster_path;
+                                            UserService
+                                                .addToWatchList(movie,user._id)
+                                                .then(function (response) {
+                                                    $route.reload();
+                                                });
+                                        });
+                                });
+                        }
+                    });
+            }
+
+            function removebookmark(movieId) {
+                UserService
+                    .checkLoggedIn()
+                    .then(function (user) {
+                        if(user === "0"){
+                            $location.url('/login');
+                        }
+                        else{
+                            UserService
+                                .deleteMovie(movieId,isLoggedIn._id)
+                                .then(function (response) {
+                                    $route.reload();
+                                })
+                        }
+                    });
+            }
+
+            function likeMovie(movieId) {
+                UserService
+                    .checkLoggedIn()
+                    .then(function (user) {
+                        if(user === "0"){
+                            $location.url('/login');
+                        }
+                        else {
+                            MovieService
+                                .getConfig()
+                                .then(function (configs) {
+                                    var baseURL = configs.images.secure_base_url + "";
+                                    var size = configs.images.profile_sizes[2];
+                                    var poster_config_path = baseURL + size;
+                                    MovieService
+                                        .getMovie(movieId)
+                                        .then(function (movie) {
+                                            movie.poster_path = poster_config_path + movie.poster_path;
+                                            UserService
+                                                .likeMovie(movie, isLoggedIn._id)
+                                                .then(function (response) {
+                                                    $route.reload();
+                                                });
+                                        });
+                                });
+                        }
+                    });
+            }
+
+            function unlikeMovie(movieId) {
+                UserService
+                    .unlikeMovie(movieId,isLoggedIn._id)
+                    .then(function (response) {
+                        $route.reload();
+                    })
+            }
 
             function search(attr,order) {
                 MovieService

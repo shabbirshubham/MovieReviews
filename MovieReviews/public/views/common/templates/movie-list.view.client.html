@@ -51,7 +51,7 @@
         TMDB Rating
     </div>
     <div class="col-sm-2 col-xs-3" style="color: #b92c28;font-size: 20px;">
-        Watch
+        Watch/Like
     </div>
 </div>
 
@@ -84,7 +84,18 @@
         <!--</div>-->
     </div>
     <div class="col-sm-2 col-xs-3">
-        <span class="fa fa-bookmark"></span>
+        <span>
+            <a ng-hide="model.watchListMovies.indexOf(movie.id)>-1" href="" ng-click="model.bookmark(movie.id)" class="fa fa-bookmark"></a>
+        </span>
+        <span>
+            <a ng-show="model.watchListMovies.indexOf(movie.id)>-1" href="" ng-click="model.removebookmark(movie.id)" class="fa fa-check"></a>
+        </span>
+        <span style="font-size: 30px">
+            <a ng-hide="model.likedMovies.indexOf(movie.id)>-1" href="" ng-click="model.likeMovie(movie.id)" class="fa fa-thumbs-o-up"></a>
+        </span>
+        <span style="font-size: 30px">
+            <a ng-show="model.likedMovies.indexOf(movie.id)>-1" href="" ng-click="model.unlikeMovie(movie.id)" class="fa fa-thumbs-up"></a>
+        </span>
     </div>
 
         <!--<p>-->

@@ -54,7 +54,8 @@
                                 var newUser={
                                     username:username,
                                     password: password,
-                                    email:email
+                                    email:email,
+                                    role:'critic'
                                 };
                                 return UserService
                                     .register(newUser)

@@ -22,10 +22,31 @@
                     <div class="col-sm-8">
                         <div class="profile-section row">
                             <h1 class="profile-section-header">Your Watch list</h1>
-                            <div>
+                            <div class="row" ng-repeat="movie in model.movies">
+                                <div class="col-sm-4 hidden-xs">
+                                    <img src="{{movie.poster_path}}"/>
+                                </div>
+                                <div class="col-sm-8 col-xs-12">
+                                    <a href="#!/movie/{{movie.id}}"> <span style="font-size: 20px">{{movie.title}} </span> </a>
+                                    <span style="font-size: 20px">({{movie.release_date.split("-")[0]}})</span>
+                                    <p>{{movie.vote_average}} <span>({{movie.vote_count}} votes)</span></p>
+                                    <span style="font-size: inherit">{{movie.overview}}</span>
+                                    <div>
+                                        <strong>Genres:</strong>
+                                        <span ng-repeat="genre in movie.genres">
+                                        {{genre.name}}<span ng-show=" ! $last ">,</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-danger btn-block" ng-click="model.deleteMovie(movie.id)">
+                                    Delete
+                                </button>
+                                <hr/>
+                            </div>
+                            <div ng-hide="model.movies">
                                 <h1 style="text-align: center" > Your Watchlist is currently empty</h1>
                                 <div style="align-content: center"><span class=""></span></div>
-                                <h3 style="text-align: center"> Explore to get started</h3>
+                                <h3 style="text-align: center"> <a href="#/home">Explore</a> to get started</h3>
                             </div>
                         </div>
                     </div>

@@ -4,12 +4,27 @@
         .module("WDP")
         .controller('movieReviewCtrl',movieReviewCtrl);
 
-    function movieReviewCtrl(MovieService,$location,$routeParams,$sce) {
+    function movieReviewCtrl(MovieService,$location,$routeParams,$sce,isLoggedIn,UserService,$route) {
         var model = this;
         model.movieId = $routeParams.movieId;
         model.getEmbedURL = getEmbedURL;
         model.getActorInfo = getActorInfo;
-
+        model.submitReview = submitReview;
+        model.user=model.isLoggedIn=isLoggedIn;
+        model.userId = isLoggedIn._id;
+        model.editReview = editReview;
+        model.deleteReview = deleteReview;
+        model.selectReview = selectReview;
+        model.cancel = cancel;
+        model.isLoggedIn = isLoggedIn;
+model.logout = logout;
+            function logout() {
+                UserService
+                    .logout()
+                    .then(function () {
+                        $location.url('/');
+                    });
+            }
         // var configUrl = {
         //     "async": true,
         //     "crossDomain": true,
@@ -48,10 +63,18 @@
         // };
 
         function init() {
+            model.editing = false;
+
             MovieService
                 .getVideo(model.movieId )
                 .then(function (video) {
                     model.youtubeurl = getEmbedURL("https://youtu.be/"+video.results[0].key);
+                });
+
+            UserService
+                .getUserReviews()
+                .then(function (reviews) {
+                    model.userreviews = reviews;
                 });
 
             MovieService
@@ -178,6 +201,89 @@
             var url = "https://www.youtube.com/embed/"+id;
             return $sce.trustAsResourceUrl(url);
         }
+
+        function submitReview(rating,userreview) {
+
+            if (!model.user._id) {
+                $location.url('/login');
+            }
+            else {
+                if (rating === undefined && userreview === undefined) {
+                    model.error = "Please enter either a review or a rating";
+                }
+                else {
+                    MovieService
+                        .getMovie(model.movieId)
+                        .then(function (movie) {
+                            UserService
+                                .submitReview(isLoggedIn._id, model.movieId, rating,
+                                                userreview, isLoggedIn.username,movie.title)
+                                .then(function (response) {
+                                    console.log(response);
+                                }, function (err) {
+                                    console.log(err);
+                                });
+                        });
+                }
+            }
+            for (r in reviews) {
+                editing[r] = false;
+            }
+            for (r in reviews) {
+                if (reviews[r]._id === reviewId) {
+                    model.index = r;
+                    editing[r] = true;
+                    return;
+                }
+            }
+        }
+
+
+        function cancel() {
+            model.selectedId = false;
+        }
+
+        function selectReview(reveiewId,text) {
+            model.selectedId = reveiewId;
+            model.text2 = text;
+        }
+
+        function editReview(reviewId,rating,text) {
+            var review = {
+                rating:rating,
+                text:text
+            };
+            UserService
+                .editReview(reviewId, review)
+                .then(function (response) {
+                    console.log(response);
+                })
+        }
+
+        function deleteReview(userId,reviewId) {
+            UserService
+                .deleteReview(userId,reviewId)
+                .then(function (response) {
+                    $route.reload();
+                })
+        }
+        //     UserService
+        //         .checkLoggedIn()
+        //         .then(function (user) {
+        //             if(user === "0"){
+        //                 $location.url('/login');
+        //             }
+        //             else{
+        //                 UserService
+        //                     .submitReview(isLoggedIn._id,model.movieId,rating,review)
+        //                     .then(function (response) {
+        //                         console.log(response);
+        //                     },function (err) {
+        //                         console.log(err);
+        //                     });
+        //             }
+        //         })
+        // }
     }
 
 })();

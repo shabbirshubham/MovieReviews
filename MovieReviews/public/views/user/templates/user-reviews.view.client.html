@@ -22,7 +22,30 @@
                     <div class="col-sm-8">
                         <div class="profile-section row">
                             <h1 class="profile-section-header">Your Reviews</h1>
-                            <div>
+
+                            <div ng-show="model.userreviews" ng-repeat="review in model.userreviews">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading"><h3>{{review.movieName}}</h3></div>
+                                    <div class="panel-body">
+                                        <div class="star-ratings-css">
+                                        <div class="star-ratings-css-top" ng-model="rating" ng-style="{'width':{{review.rating}}*(100/5)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                                        <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                                        </div>
+                                        <div style="align-content: center">{{review.text}}</div>
+                                        <div style="align-content: center">Posted On: {{review.posted | date:'fullDate'}}</div>
+                                    </div>
+                                </div>
+                                <!--<div class="panel-default">{{review.movieName}}</div>-->
+                                <!--<div class="star-ratings-css">-->
+                                    <!--<div class="star-ratings-css-top" ng-model="rating" ng-style="{'width':{{review.rating}}*(100/5)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>-->
+                                    <!--<div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>-->
+                                <!--</div>-->
+                                <!--<div style="align-content: center">{{review.text}}</div>-->
+                                <!--<div style="align-content: center">Posted On: {{review.posted | date:'fullDate'}}</div>-->
+                                <hr/>
+                            </div>
+
+                            <div ng-hide="model.userreviews">
                                 <h1 style="text-align: center" > Your have not posted any review</h1>
                                 <div style="align-content: center"><span class=""></span></div>
                                 <h3 style="text-align: center"> Share your opinion</h3>
