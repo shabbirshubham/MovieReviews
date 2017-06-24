@@ -20,7 +20,7 @@
             model.userId = isLoggedIn._id;
 
             UserService
-                .getUserReviews()
+                .getUserReviews(model.userId)
                 .then(function (userreviews) {
                     model.userreviews = userreviews;
                 });

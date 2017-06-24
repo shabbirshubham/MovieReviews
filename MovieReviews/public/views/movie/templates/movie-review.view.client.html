@@ -494,7 +494,7 @@
                                     </div>
                                     <!--"-->
                                     <span style="font-size: 20px;" ng-model="text">{{userreview.text}}</span>
-                                    <p>- By {{userreview.username}}</p>
+                                    <p>- By <a href="">{{userreview.username}}</a></p>
                                     <button ng-show="userreview.userId === model.userId" ng-click="model.selectReview(userreview._id,userreview.text)" class="btn btn-info btn-block">Edit Review</button>
                                     <button ng-show="userreview.userId === model.userId" ng-click="model.deleteReview(userreview.userId,userreview._id)" class="btn btn-danger btn-block">Delete Review</button>
                                 </div>

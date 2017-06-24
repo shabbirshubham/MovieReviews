@@ -8,9 +8,10 @@ var userModel = require('../user/user.model.server');
 reviewModel.createReview = createReview;
 reviewModel.deleteReview = deleteReview;
 reviewModel.editReview = editReview;
-reviewModel.getAllReviews = getAllReviews;
+reviewModel.getUserReviews = getUserReviews;
 reviewModel.getUserIdbyReviewId = getUserIdbyReviewId;
 reviewModel.editReview = editReview;
+reviewModel.getAllReviews = getAllReviews;
 
 module.exports=reviewModel;
 //------------------------------------------------------------
@@ -36,14 +37,18 @@ function editReview(reviewId,review) {
     return reviewModel.update({_id:reviewId},{$set:review});
 }
 
-function getAllReviews() {
-    return reviewModel.find();
+function getUserReviews(userId) {
+    return reviewModel.find({userId:userId});
 }
 
 function getUserIdbyReviewId(reviewId) {
-    return reviewId.findById(reviewId)
+    return reviewModel.findById(reviewId)
         .then(function (review) {
            return review.userId;
         });
+}
+
+function getAllReviews() {
+    return reviewModel.find();
 }
 // ---------------------------------------------------------------

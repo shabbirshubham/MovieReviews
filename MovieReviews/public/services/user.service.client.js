@@ -32,6 +32,7 @@
             this.getFollowers=getFollowers;
             this.getFollowings=getFollowings;
             this.removeFollowing = removeFollowing;
+            this.getAllReviews = getAllReviews;
 
             function login(username,password) {
                 var url = "/api/project/login";
@@ -179,8 +180,8 @@
                     });
             }
             
-            function getUserReviews() {
-                var url = "/api/project/getUserReviews";
+            function getUserReviews(userId) {
+                var url = "/api/project/getUserReviews/"+userId;
                 return $http.get(url)
                     .then(function (response) {
                         return response.data;
@@ -208,14 +209,14 @@
 
             function addFollower(followerId,followeeId) {
 
-                var url = 'api/project/addFollower/followerId/'+followerId+'/follower/'+followeeId;
+                var url = '/api/project/addFollower/followerId/'+followerId+'/follower/'+followeeId;
                 return $http.put(url).then(function (response) {
                     return response.data;
                 })
             }
             function addFollowing(followerId,followeeId) {
 
-                var url = 'api/project/addFollowing/followerId/'+followerId+'/follower/'+followeeId;
+                var url = '/api/project/addFollowing/followerId/'+followerId+'/follower/'+followeeId;
                 return $http.put(url).then(function (response) {
                     return response.data;
                 })
@@ -223,7 +224,7 @@
 
             function getFollowings(userId) {
 
-                var url = 'api/project/getFollowings/'+userId;
+                var url = '/api/project/getFollowings/'+userId;
                 return $http.get(url).then(function (response) {
                     return response.data;
                 })
@@ -231,18 +232,26 @@
 
             function getFollowers(userId) {
 
-                var url = 'api/project/getFollowers/'+userId;
+                var url = '/api/project/getFollowers/'+userId;
                 return $http.get(url).then(function (response) {
                     return response.data;
                 })
             }
 
             function removeFollowing(followeeId,userId) {
-                var url = 'api/project/removeFollowing/followee/'+followeeId+'/follower/'+userId;
+                var url = '/api/project/removeFollowing/followee/'+followeeId+'/follower/'+userId;
                 return $http.delete(url).then(function (response) {
                     return response.data;
                 })
             }            
+            
+            function getAllReviews() {
+                var url = "/api/project/getAllReviews";
+                return $http.get(url).
+                then(function (response) {
+                    return response.data;
+                })
+            }
         }
     }
     

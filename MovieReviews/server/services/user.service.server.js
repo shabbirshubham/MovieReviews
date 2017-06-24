@@ -39,10 +39,10 @@
         app.post ("/api/project/uploadProfileImage", upload.single('myFile'), uploadImage);
         app.get('/api/project/getFollowers/:userId',getFollowers);
         app.get('/api/project/getFollowings/:userId',getFollowings);
-        app.put('api/project/addFollower/followerId/:followerId/follower/:followeeId',addFollower);
-        app.put('api/project/addFollowings/followerId/:followerId/follower/:followeeId',addFollowing);
-        app.delete('api/project/removeFollowing/followee/:followerId/follower/:followeeId',removeFollowing);
-
+        app.put('/api/project/addFollower/followerId/:followerId/follower/:followeeId',addFollower);
+        app.put('/api/project/addFollowings/followerId/:followerId/follower/:followeeId',addFollowing);
+        app.delete('/api/project/removeFollowing/followee/:followerId/follower/:followeeId',removeFollowing);
+        app.get('/api/project/getAllReviews',getAllReviews);
 
         app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
         app.get('/google/callback',
@@ -426,8 +426,9 @@
         }
 
         function getUserReviews(req,res) {
+            var userId = req.params.userId;
             reviewModel
-                .getAllReviews()
+                .getUserReviews(userId)
                 .then(function (reviews) {
                     res.send(reviews);
                 },function (err) {
@@ -458,6 +459,16 @@
                 },function (response) {
                     res.sendStatus(404);
                 });
+        }
+
+        function getAllReviews(req,res) {
+            reviewModel
+                .getAllReviews()
+                .then(function (response) {
+                    res.send(response);
+                },function (err) {
+                    res.sendStatus(404);
+                })
         }
         // function deleteReview(req,res) {
         //     var review = req.body;

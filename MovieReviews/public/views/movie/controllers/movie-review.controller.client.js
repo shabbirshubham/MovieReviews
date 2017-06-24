@@ -72,7 +72,7 @@ model.logout = logout;
                 });
 
             UserService
-                .getUserReviews()
+                .getAllReviews()
                 .then(function (reviews) {
                     model.userreviews = reviews;
                 });
@@ -224,16 +224,6 @@ model.logout = logout;
                                     console.log(err);
                                 });
                         });
-                }
-            }
-            for (r in reviews) {
-                editing[r] = false;
-            }
-            for (r in reviews) {
-                if (reviews[r]._id === reviewId) {
-                    model.index = r;
-                    editing[r] = true;
-                    return;
                 }
             }
         }
