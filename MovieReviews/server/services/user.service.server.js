@@ -33,7 +33,7 @@
         app.delete('/api/project/unlikeMovie/:movieId/user/:userId',unlikeMovie);
         app.get('/api/project/getLikedMovies/:userId',getLikedMovies);
         app.post('/api/project/submitReview/user/:userId',submitReview);
-        app.get('/api/project/getUserReviews',getUserReviews);
+        app.get('/api/project/getUserReviews/:userId',getUserReviews);
         app.post('/api/editReview/user/:reviewId',editReview);
         app.delete('/api/project/deleteReview/user/:userId/review/:reviewId',deleteReview);
         app.post ("/api/project/uploadProfileImage", upload.single('myFile'), uploadImage);
