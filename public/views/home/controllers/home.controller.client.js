@@ -5,8 +5,9 @@
     
     function homeCtrl($routeParams,UserService,$location,MovieService,isLoggedIn,$http) {
         var model = this;
-        model.isLoggedIn=isLoggedIn;
-        model.search = search;
+        // model.searchMovie = searchMovie;
+
+        model.user=model.isLoggedIn=isLoggedIn;
         model.logout = logout;
         function logout() {
             UserService
@@ -32,5 +33,8 @@
 
         function search(query) {
         }
+        // function searchMovie(query) {
+        //     $location.url('/search/' + query);
+        // }
     }
 })();

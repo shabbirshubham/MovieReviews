@@ -1,12 +1,15 @@
 
 var mongoose = require('mongoose');
-var reviewScheme = require('./review.schema.server');
+var reviewSchema = require('./review.schema.server');
 var reviewModel = mongoose.model('ReviewModel',reviewSchema);
 var userModel = require('../user/user.model.server');
 //-----------------------------------------------------------
     //Function Declarations
 reviewModel.createReview = createReview;
 reviewModel.deleteReview = deleteReview;
+reviewModel.editReview = editReview;
+reviewModel.getAllReviews = getAllReviews;
+reviewModel.getUserIdbyReviewId = getUserIdbyReviewId;
 reviewModel.editReview = editReview;
 
 module.exports=reviewModel;
@@ -33,4 +36,14 @@ function editReview(reviewId,review) {
     return reviewModel.update({_id:reviewId},{$set:review});
 }
 
+function getAllReviews() {
+    return reviewModel.find();
+}
+
+function getUserIdbyReviewId(reviewId) {
+    return reviewId.findById(reviewId)
+        .then(function (review) {
+           return review.userId;
+        });
+}
 // ---------------------------------------------------------------

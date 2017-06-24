@@ -4,11 +4,16 @@
             .module("WDP")
             .controller('topratedmovieListCtrl', topratedmovieListCtrl);
 
-        function topratedmovieListCtrl(MovieService, $location, $routeParams, $sce,isLoggedIn,UserService) {
+        function topratedmovieListCtrl($route,UserService,isLoggedIn,MovieService, $location, $routeParams, $sce) {
             var model = this;
-            model.isLoggedIn=isLoggedIn;
             model.pagination = pagination;
-            model.logout = logout;
+            model.search = search;
+            model.isLoggedIn=isLoggedIn;
+            model.bookmark = bookmark;
+            model.removebookmark = removebookmark;
+            model.likeMovie = likeMovie;
+            model.unlikeMovie = unlikeMovie;
+model.logout = logout;
             function logout() {
                 UserService
                     .logout()
@@ -28,44 +33,144 @@
                         MovieService
                             .getTopRatedMovies()
                             .then(function (response) {
-                                for(m in response.results){
-                                    var movie = response.results[m];
-                                    model.movieId = movie.id;
-                                    var path = poster_config_path + movie.poster_path;
-                                    movie.poster_path = path;
-                                    arr = movie.release_date.split("-");
-                                    movie.release_date = arr[0];
+                                getMovieInfo(response,poster_config_path);
+                            });
+                    });
+
+                UserService
+                    .getMoviesFromWatchList(isLoggedIn._id)
+                    .then(function (movies) {
+                        var movieIds = [];
+                        for(m in movies)
+                            movieIds.push(movies[m].id);
+                        model.watchListMovies = movieIds;
+                    });
+
+                UserService
+                    .getLikedMovies(isLoggedIn._id)
+                    .then(function (movies) {
+                        var movieIds = [];
+                        for(m in movies)
+                            movieIds.push(movies[m].id);
+                        model.likedMovies = movieIds;
+                    })
+            }
+            init();
+
+
+            function bookmark(movieId) {
+                UserService
+                    .checkLoggedIn()
+                    .then(function (user) {
+                        if(user === "0"){
+                            $location.url('/login');
+                        }
+                        else{
+                            MovieService
+                                .getConfig()
+                                .then(function (configs) {
+                                    var baseURL = configs.images.secure_base_url + "";
+                                    var size = configs.images.profile_sizes[2];
+                                    var poster_config_path = baseURL + size;
                                     MovieService
-                                        .getCredits(model.movieId)
-                                        .then(function (credits) {
-                                            var directors=[];
-                                            var actors = [];
-                                            for(a in credits.cast){
-                                                if(actors.length>3)
-                                                    break;
-                                                else{
-                                                    actors.push(credits.cast[a]);
-                                                }
-                                            }
-                                            for(c in credits.crew){
-                                                if(directors.length >2) {
-                                                    break;
-                                                }
-                                                else{
-                                                    if (credits.crew[c].department === "Directing") {
-                                                        directors.push(credits.crew[c].name);
-                                                    }
-                                                }
-                                            }
-                                            model.directors = directors;
-                                            model.actors = actors;
+                                        .getMovie(movieId)
+                                        .then(function (movie) {
+                                            movie.poster_path = poster_config_path + movie.poster_path;
+                                            UserService
+                                                .addToWatchList(movie,user._id)
+                                                .then(function (response) {
+                                                    $route.reload();
+                                                });
                                         });
-                                }
-                                model.movies = response.results;
+                                });
+                        }
+                    });
+            }
+
+            function removebookmark(movieId) {
+                UserService
+                    .checkLoggedIn()
+                    .then(function (user) {
+                        if(user === "0"){
+                            $location.url('/login');
+                        }
+                        else{
+                            UserService
+                                .deleteMovie(movieId,isLoggedIn._id)
+                                .then(function (response) {
+                                    $route.reload();
+                                })
+                        }
+                    });
+            }
+
+            function likeMovie(movieId) {
+                UserService
+                    .checkLoggedIn()
+                    .then(function (user) {
+                        if(user === "0"){
+                            $location.url('/login');
+                        }
+                        else {
+                            MovieService
+                                .getConfig()
+                                .then(function (configs) {
+                                    var baseURL = configs.images.secure_base_url + "";
+                                    var size = configs.images.profile_sizes[2];
+                                    var poster_config_path = baseURL + size;
+                                    MovieService
+                                        .getMovie(movieId)
+                                        .then(function (movie) {
+                                            movie.poster_path = poster_config_path + movie.poster_path;
+                                            UserService
+                                                .likeMovie(movie, isLoggedIn._id)
+                                                .then(function (response) {
+                                                    $route.reload();
+                                                });
+                                        });
+                                });
+                        }
+                    });
+            }
+
+            function unlikeMovie(movieId) {
+                UserService
+                    .unlikeMovie(movieId,isLoggedIn._id)
+                    .then(function (response) {
+                        $route.reload();
+                    })
+            }
+
+
+            function search(attr,order) {
+                MovieService
+                    .getConfig()
+                    .then(function (configs) {
+                        var baseURL = configs.images.secure_base_url + "";
+                        var size = configs.images.profile_sizes[2];
+                        var poster_config_path = baseURL + size;
+                        MovieService
+                            .getMoviesBySorting(attr, order)
+                            .then(function (response) {
+                                getMovieInfo(response,poster_config_path);
                             });
                     });
             }
-            init();
+            
+            function searchSortedMoviesByPageNumber(attr,order,pagenumber) {
+                MovieService
+                    .getConfig()
+                    .then(function (configs) {
+                        var baseURL = configs.images.secure_base_url + "";
+                        var size = configs.images.profile_sizes[2];
+                        var poster_config_path = baseURL + size;
+                        MovieService
+                            .getSortedTopRatedMoviesByPageNumber(attr, order, pagenumber)
+                            .then(function (response) {
+                                getMovieInfo(response,poster_config_path);
+                            });
+                    });
+            }
 
             function pagination(pageNumber) {
                 MovieService
@@ -74,46 +179,55 @@
                         var baseURL = configs.images.secure_base_url+"";
                         var size = configs.images.profile_sizes[2];
                         var poster_config_path = baseURL + size;
-                        MovieService
-                            .getMoviesByPageNumber(pageNumber,model.genreId)
-                            .then(function (response) {
-                                model.pagenumber = (pageNumber-1)*10;
-                                for(m in response.results){
-                                    var movie = response.results[m];
-                                    model.movieId = movie.id;
-                                    var path = poster_config_path + movie.poster_path;
-                                    movie.poster_path = path;
-                                    arr = movie.release_date.split("-");
-                                    movie.release_date = arr[0];
-                                    MovieService
-                                        .getCredits(model.movieId)
-                                        .then(function (credits) {
-                                            var directors=[];
-                                            var actors = [];
-                                            for(a in credits.cast){
-                                                if(actors.length>3)
-                                                    break;
-                                                else{
-                                                    actors.push(credits.cast[a]);
-                                                }
-                                            }
-                                            for(c in credits.crew){
-                                                if(directors.length >2) {
-                                                    break;
-                                                }
-                                                else{
-                                                    if (credits.crew[c].department === "Directing") {
-                                                        directors.push(credits.crew[c].name);
-                                                    }
-                                                }
-                                            }
-                                            model.directors = directors;
-                                            model.actors = actors;
-                                        });
-                                }
-                                model.movies = response.results;
-                            });
+                        if(model.attribute === "" || model.attribute === undefined
+                            || model.order === undefined || model.attribute === "") {
+                            MovieService
+                                .getTopRatedMoviesByPageNumber(pageNumber)
+                                .then(function (response) {
+                                    getMovieInfo(response,poster_config_path,pageNumber);
+                                });
+                        }else{
+                            searchSortedMoviesByPageNumber(model.attribute,model.order,pagenumber);
+                        }
                     });
+            }
+
+            function getMovieInfo(response,poster_config_path,pageNumber){
+                model.pagenumber = (pageNumber-1)*10;
+                for(m in response.results){
+                    var movie = response.results[m];
+                    model.movieId = movie.id;
+                    var path = poster_config_path + movie.poster_path;
+                    movie.poster_path = path;
+                    arr = movie.release_date.split("-");
+                    movie.release_date = arr[0];
+                    // MovieService
+                    //     .getCredits(model.movieId)
+                    //     .then(function (credits) {
+                    //         var directors=[];
+                    //         var actors = [];
+                    //         for(a in credits.cast){
+                    //             if(actors.length>3)
+                    //                 break;
+                    //             else{
+                    //                 actors.push(credits.cast[a]);
+                    //             }
+                    //         }
+                    //         for(c in credits.crew){
+                    //             if(directors.length >2) {
+                    //                 break;
+                    //             }
+                    //             else{
+                    //                 if (credits.crew[c].department === "Directing") {
+                    //                     directors.push(credits.crew[c].name);
+                    //                 }
+                    //             }
+                    //         }
+                    //         model.directors = directors;
+                    //         model.actors = actors;
+                    //     });
+                }
+                model.movies = response.results;
             }
         }
     }

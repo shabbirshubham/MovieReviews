@@ -1,25 +1,47 @@
 (function () {
     
-   var app= angular.module("WDP")
-       app.controller('profileCtrl',profileCtrl);
-
-    function profileCtrl(isLoggedIn,UserService,$location) {
-
-
+    angular.module("WDP").controller('profileCtrl',profileCtrl);
+    
+    function profileCtrl(UserService,isLoggedIn,$location,$route) {
 
         var model = this;
-        model.user= model.isLoggedIn=isLoggedIn;
+        model.deleteMovie = deleteMovie;
+        model.deleteLikedMovie = deleteLikedMovie;
+        model.user=model.isLoggedIn=isLoggedIn;
         model.profilePic='';
         model.logout = logout;
         model.curUrl = $location.path();
-        
         model.deleteUser=deleteUser;
-        // model.findUserByEmail=findUserByEmail;
-        model.logout=logout;
         model.updateUser=updateUser;
         model.getFollowings=getFollowings;
         model.getFollowers=getFollowers;
         model.removeFollowing=removeFollowing;
+        function init() {
+            model.userId = isLoggedIn._id;
+
+            UserService
+                .getUserReviews()
+                .then(function (userreviews) {
+                    model.userreviews = userreviews;
+                });
+
+            UserService
+                .getMoviesFromWatchList(model.userId)
+                .then(function (movies) {
+                    if(movies.length>0)
+                        model.movies = movies;
+                });
+
+            UserService
+                .getLikedMovies(model.userId)
+                .then(function (likedmovies) {
+                    if(likedmovies.length>0)
+                        model.likedmovies = likedmovies;
+                });
+        }
+
+        init();
+
         function logout() {
             UserService
                 .logout()
@@ -28,6 +50,7 @@
                 });
         }
         
+        
         function deleteUser() {
             
         }
@@ -35,7 +58,36 @@
 
         }
 
-        function getFollowings(userId) {
+        function deleteMovie(movieId) {
+            UserService
+                .deleteMovie(movieId,model.userId)
+                .then(function (response) {
+                    UserService
+                        .getMoviesFromWatchList(model.userId)
+                        .then(function (movies) {
+                            if(movies.length>0)
+                                model.movies = movies;
+                        });
+                    // $location.url('/user/watchlist');
+                });
+        }
+
+        function deleteLikedMovie(movieId) {
+            UserService
+                .unlikeMovie(movieId,model.userId)
+                .then(function (response) {
+                    // console.log(response);
+                    UserService
+                        .getLikedMovies(model.userId)
+                        .then(function (movies) {
+                            if(movies.length>0)
+                                model.movies = movies;
+                        });
+                    // $location.url('/user/watchlist');
+                });
+        }
+
+function getFollowings(userId) {
 
             return UserService
                 .getFollowings(userId)
@@ -60,10 +112,6 @@
 
                 })
         }
-
-
-
-
 
     }
 })();

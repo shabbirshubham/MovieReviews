@@ -15,6 +15,7 @@
         passport.use(new LocalStrategy(localStrategy));
 //-----------------------------------------------------------
         var userModel = require('../../model/user/user.model.server');
+        var reviewModel = require('../../model/review/review.model.server');
 //------------------------------------------------------------
     // All URI
 
@@ -25,12 +26,23 @@
         app.put('/api/project/updateUser:userId',updateUser);
         app.get('/api/project/findUserByUsername',findUserByUsername);
         app.delete('/api/project/deleteUser:userId',deleteUser);
+        app.post('/api/project/addToWatchList/:userId',addToWatchList);
+        app.delete('/api/project/deleteMoviesFromWatchList/:movieId/user/:userId',deleteMoviesFromWatchList);
+        app.get('/api/project/getMoviesFromWatchList/:userId',getMoviesFromWatchList);
+        app.post('/api/project/likeMovie/user/:userId',likeMovie);
+        app.delete('/api/project/unlikeMovie/:movieId/user/:userId',unlikeMovie);
+        app.get('/api/project/getLikedMovies/:userId',getLikedMovies);
+        app.post('/api/project/submitReview/user/:userId',submitReview);
+        app.get('/api/project/getUserReviews',getUserReviews);
+        app.post('/api/editReview/user/:reviewId',editReview);
+        app.delete('/api/project/deleteReview/user/:userId/review/:reviewId',deleteReview);
         app.post ("/api/project/uploadProfileImage", upload.single('myFile'), uploadImage);
         app.get('/api/project/getFollowers/:userId',getFollowers);
         app.get('/api/project/getFollowings/:userId',getFollowings);
         app.put('api/project/addFollower/followerId/:followerId/follower/:followeeId',addFollower);
         app.put('api/project/addFollowings/followerId/:followerId/follower/:followeeId',addFollowing);
         app.delete('api/project/removeFollowing/followee/:followerId/follower/:followeeId',removeFollowing);
+
 
         app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
         app.get('/google/callback',
@@ -285,7 +297,6 @@
                 .then(function (user) {
                     res.json(user.followers);
                 })
-
         }
 
         function getFollowings(req,res) {
@@ -294,7 +305,6 @@
                 .then(function (user) {
                     res.json(user.following);
                 })
-
         }
 
         function removeFollowing(req,res) {
@@ -306,3 +316,159 @@
                 res.sendStatus(200);
             })
         }
+        function addToWatchList(req,res) {
+            var movie = req.body;
+            var userId = req.params.userId;
+            var movieobject = {
+                id:movie.id,
+                title:movie.title,
+                poster_path:movie.poster_path,
+                vote_average:movie.vote_average,
+                overview:movie.overview,
+                release_date:movie.release_date,
+                genres:movie.genres,
+                vote_count:movie.vote_count
+               };
+            userModel
+                .addMovie(userId,movieobject)
+                .then(function (response) {
+                    res.sendStatus(200);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                })
+        }
+
+        function getMoviesFromWatchList(req,res) {
+            var userId = req.params.userId;
+            userModel
+                .getMoviesFromWatchList(userId)
+                .then(function (movies) {
+                    res.send(movies);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                })
+        }
+
+        function deleteMoviesFromWatchList(req,res) {
+            var movieId = req.params.movieId;
+            var userId = req.params.userId;
+            userModel
+                .deleteMoviesFromWatchList(movieId,userId)
+                .then(function (response) {
+                    res.sendStatus(200);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                })
+        }
+
+        function likeMovie(req,res) {
+            var movie = req.body;
+            var userId = req.params.userId;
+            var movieobject = {
+                id:movie.id,
+                title:movie.title,
+                poster_path:movie.poster_path,
+                vote_average:movie.vote_average,
+                overview:movie.overview,
+                release_date:movie.release_date,
+                genres:movie.genres,
+                vote_count:movie.vote_count
+            };
+            userModel
+                .likeMovie(userId,movieobject)
+                .then(function (response) {
+                    res.sendStatus(200);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                })
+        }
+
+        function unlikeMovie(req,res) {
+            var movieId = req.params.movieId;
+            var userId = req.params.userId;
+            userModel
+                .unlikeMovie(movieId,userId)
+                .then(function (response) {
+                    res.sendStatus(200);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                })
+        }
+        
+        function getLikedMovies(req,res) {
+            var userId = req.params.userId;
+            userModel
+                .getLikedMovies(userId)
+                .then(function (movies) {
+                    res.send(movies);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                })
+        }
+
+        function submitReview(req,res) {
+            var review = req.body;
+            var userId =  req.params.userId;
+            reviewModel
+                .createReview(userId,review)
+                .then(function (response) {
+                    res.send(response);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                });
+        }
+
+        function getUserReviews(req,res) {
+            reviewModel
+                .getAllReviews()
+                .then(function (reviews) {
+                    res.send(reviews);
+                },function (err) {
+                    res.sendStatus(404);
+                })
+        }
+
+        function editReview(req,res) {
+            var reviewId = req.params.reviewId;
+            var review = req.body;
+            reviewModel
+                .editReview(reviewId,review)
+                .then(function (response) {
+                    res.send(response);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                })
+        }
+        
+        function deleteReview(req,res) {
+            var userId = req.params.userId;
+            var reviewId  = req.params.reviewId;
+            reviewModel
+                .deleteReview(userId,reviewId)
+                .then(function (response) {
+                    res.sendStatus(200);
+                },function (response) {
+                    res.sendStatus(404);
+                });
+        }
+        // function deleteReview(req,res) {
+        //     var review = req.body;
+        //     var userId =  req.params.userId;
+        //     reviewModel
+        //         .deleteReview(userId,review)
+        //         .then(function (response) {
+        //             res.sendStatus(200);
+        //         },function (err) {
+        //             console.log(err);
+        //             res.sendStatus(404);
+        //         });
+        // }
+

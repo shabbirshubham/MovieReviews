@@ -17,6 +17,16 @@
                 controllerAs:'model',
                 resolve: { isLoggedIn: checkLoggedIn }
             })
+             .when('/login',{
+                 templateUrl:'views/user/templates/login.view.client.html',
+                 controller: 'loginCtrl',
+                 controllerAs:'model'
+             })
+             .when('/search/:movie',{
+                 templateUrl:'views/home/templates/movie-search-list.view.client.html',
+                 controller:'movieSearchCtrl',
+                 controllerAs:'model'
+             })
              .when('/movie/genre/:genreId',{
                  templateUrl:'views/movie/templates/movie-genre-list.view.client.html',
                  controller:'movieGenreCtrl',
@@ -81,11 +91,6 @@
                  controllerAs:"model",
                  resolve: { isLoggedIn: checkLoggedIn }
              })
-             .when('/login',{
-                 templateUrl:'views/user/templates/login.view.client.html',
-                controller: 'loginCtrl',
-                 controllerAs:'model'
-             })
              .when('/user/account',{
                  templateUrl:'views/user/templates/account-settings.view.client.html',
                  controller: 'profileCtrl',
@@ -94,6 +99,12 @@
              })
              .when('/user/watchlist',{
                  templateUrl:'views/user/templates/watchlist.view.client.html',
+                 controller: 'profileCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
+             })
+             .when('/user/likedmovies',{
+                 templateUrl:'views/user/templates/likedmovies.view.client.html',
                  controller: 'profileCtrl',
                  controllerAs:'model',
                  resolve: { isLoggedIn: checkLoggedIn }
@@ -112,7 +123,7 @@
             UserService
                 .checkLoggedIn()
                 .then(function (user) {
-
+                    console.log(user);
                     if(user==='0'){
                         deferred.resolve({});
                         //$location.url('/');

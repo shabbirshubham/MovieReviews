@@ -4,21 +4,27 @@
         .module("WDP")
         .controller('movieReviewCtrl',movieReviewCtrl);
 
-    function movieReviewCtrl(MovieService,$location,$routeParams,$sce,isLoggedIn,UserService) {
+    function movieReviewCtrl(MovieService,$location,$routeParams,$sce,isLoggedIn,UserService,$route) {
         var model = this;
-        model.isLoggedIn=isLoggedIn;
         model.movieId = $routeParams.movieId;
         model.getEmbedURL = getEmbedURL;
         model.getActorInfo = getActorInfo;
-        model.logout = logout;
-        function logout() {
-            UserService
-                .logout()
-                .then(function () {
-                    $location.url('/');
-                });
-        }
-
+        model.submitReview = submitReview;
+        model.user=model.isLoggedIn=isLoggedIn;
+        model.userId = isLoggedIn._id;
+        model.editReview = editReview;
+        model.deleteReview = deleteReview;
+        model.selectReview = selectReview;
+        model.cancel = cancel;
+        model.isLoggedIn = isLoggedIn;
+model.logout = logout;
+            function logout() {
+                UserService
+                    .logout()
+                    .then(function () {
+                        $location.url('/');
+                    });
+            }
         // var configUrl = {
         //     "async": true,
         //     "crossDomain": true,
@@ -57,10 +63,24 @@
         // };
 
         function init() {
+            model.editing = false;
+
             MovieService
                 .getVideo(model.movieId )
                 .then(function (video) {
-                    model.youtubeurl = "https://youtu.be/"+video.results[0].key;
+                    model.youtubeurl = getEmbedURL("https://youtu.be/"+video.results[0].key);
+                });
+
+            UserService
+                .getUserReviews()
+                .then(function (reviews) {
+                    model.userreviews = reviews;
+                });
+
+            MovieService
+                .getReviewsByMovieId(model.movieId)
+                .then(function (response) {
+                   model.reviews = response.results;
                 });
 
             MovieService
@@ -80,6 +100,13 @@
                                     break;
                                 else{
                                     credits.cast[a].profile_path = poster_config_path + credits.cast[a].profile_path;
+                                    // console.log(getActorInfo(credits.cast[a].id));
+                                    // console.log(credits.cast[a].order);
+                                    // MovieService
+                                    //     .getActorInfo(credits.cast[a].id)
+                                    //     .then(function (response) {
+                                    //         credits.cast[a].order = response.biography;
+                                    //     });
                                     actors.push(credits.cast[a]);
                                 }
                             }
@@ -101,10 +128,16 @@
                             model.actors = actors;
                             model.writers = writers;
                         });
+
                         MovieService
                             .getMovie(model.movieId )
                             .then(function (response) {
                                         model.movie = response;
+                                        MovieService
+                                            .getReviewsByMovieName(model.movie.title)
+                                            .then(function (response) {
+                                                model.crticreviews = response.results;
+                                            });
                                         model.poster_path = poster_config_path + response.backdrop_path;
                                         model.title = response.original_title;
                                         arr = response.release_date.split("-");
@@ -125,12 +158,13 @@
                                         model.gross = moneyFormat(response.revenue,'$');
                                         model.tagline = response.tagline;
                             });
+
                     MovieService
                         .getSimilarMovies(model.movieId )
                         .then(function (movies) {
                             var movs = [];
                             for(m in movies.results){
-                                if(movs.length>5)
+                                if(movs.length>8)
                                     break;
                                 var similarmoviepath = poster_config_path + movies.results[m].poster_path;
                                 movies.results[m].poster_path = similarmoviepath;
@@ -167,6 +201,89 @@
             var url = "https://www.youtube.com/embed/"+id;
             return $sce.trustAsResourceUrl(url);
         }
+
+        function submitReview(rating,userreview) {
+
+            if (!model.user._id) {
+                $location.url('/login');
+            }
+            else {
+                if (rating === undefined && userreview === undefined) {
+                    model.error = "Please enter either a review or a rating";
+                }
+                else {
+                    MovieService
+                        .getMovie(model.movieId)
+                        .then(function (movie) {
+                            UserService
+                                .submitReview(isLoggedIn._id, model.movieId, rating,
+                                                userreview, isLoggedIn.username,movie.title)
+                                .then(function (response) {
+                                    console.log(response);
+                                }, function (err) {
+                                    console.log(err);
+                                });
+                        });
+                }
+            }
+            for (r in reviews) {
+                editing[r] = false;
+            }
+            for (r in reviews) {
+                if (reviews[r]._id === reviewId) {
+                    model.index = r;
+                    editing[r] = true;
+                    return;
+                }
+            }
+        }
+
+
+        function cancel() {
+            model.selectedId = false;
+        }
+
+        function selectReview(reveiewId,text) {
+            model.selectedId = reveiewId;
+            model.text2 = text;
+        }
+
+        function editReview(reviewId,rating,text) {
+            var review = {
+                rating:rating,
+                text:text
+            };
+            UserService
+                .editReview(reviewId, review)
+                .then(function (response) {
+                    console.log(response);
+                })
+        }
+
+        function deleteReview(userId,reviewId) {
+            UserService
+                .deleteReview(userId,reviewId)
+                .then(function (response) {
+                    $route.reload();
+                })
+        }
+        //     UserService
+        //         .checkLoggedIn()
+        //         .then(function (user) {
+        //             if(user === "0"){
+        //                 $location.url('/login');
+        //             }
+        //             else{
+        //                 UserService
+        //                     .submitReview(isLoggedIn._id,model.movieId,rating,review)
+        //                     .then(function (response) {
+        //                         console.log(response);
+        //                     },function (err) {
+        //                         console.log(err);
+        //                     });
+        //             }
+        //         })
+        // }
     }
 
 })();
