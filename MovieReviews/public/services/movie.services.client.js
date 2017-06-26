@@ -31,8 +31,18 @@
                 getSortedTopRatedMoviesByPageNumber:getSortedTopRatedMoviesByPageNumber,
                 getReviewsByMovieName:getReviewsByMovieName,
                 getReviewsByMovieId:getReviewsByMovieId,
-                getMoviesBySorting:getMoviesBySorting
-            };
+                getMoviesBySorting:getMoviesBySorting,
+                getNowPlayingMovies:getNowPlayingMovies,
+                getNowPlayingMoviesByPageNumber:getNowPlayingMoviesByPageNumber,
+                getNowPlayingSortedMoviesByPageNumber:getNowPlayingSortedMoviesByPageNumber,
+                getPopularMovies:getPopularMovies,
+                getPopularMoviesByPageNumber:getPopularMoviesByPageNumber,
+                getPopularMoviesSortedMoviesByPageNumber:getPopularMoviesSortedMoviesByPageNumber,
+                getTrendingMoviesOfThisYear:getTrendingMoviesOfThisYear,
+                getTrendingMoviesOfThisYearByPageNumber:getTrendingMoviesOfThisYearByPageNumber,
+                getMoviesBySearchByPageNumber:getMoviesBySearchByPageNumber,
+                getMoviesSortedMoviesByPageNumber:getMoviesSortedMoviesByPageNumber
+        };
 
             return api;
 
@@ -138,11 +148,11 @@
                 }
                 else {
                     if (attr) {
-                        url = "https://api.themoviedb.org/3/movie/upcoming?api_key="+API_KEY+
+                        url = "https://api.themoviedb.org/3/movie/now_playing?api_key="+API_KEY+
                             "&language=en-US&include_adult=false&sort_by="+attr+"&page="+pageNumber;
                     }
                     else if(order){
-                        url = "https://api.themoviedb.org/3/movie/upcoming?api_key="+API_KEY+
+                        url = "https://api.themoviedb.org/3/movie/now_playing?api_key="+API_KEY+
                             "&language=en-US&include_adult=false&sort_by="+order+"&page="+pageNumber;
                     }
                     else {
@@ -230,19 +240,19 @@
                     });
             }
 
-            function getSortedGenreMovies(attr,order,genreId) {
+            function getSortedGenreMovies(attr,order,genreId,pageNumber) {
                 if(attr && order) {
                     var url = "https://api.themoviedb.org/3/genre/"+genreId+"/movies?api_key=" + API_KEY +
-                        "&language=en-US&include_adult=false&sort_by=" + attr + "." + order + "&page=1";
+                        "&language=en-US&include_adult=false&sort_by=" + attr + "." + order + "&page="+pageNumber;
                 }
                 else {
                     if (attr) {
                         url = "https://api.themoviedb.org/3/genre/"+genreId+"/movies?api_key="+API_KEY+
-                            "&language=en-US&include_adult=false&sort_by="+attr+"&page=1";
+                            "&language=en-US&include_adult=false&sort_by="+attr+"&page="+pageNumber;
                     }
                     else if(order){
                         url = "https://api.themoviedb.org/3/genre/"+genreId+"/movies?api_key="+API_KEY+
-                            "&language=en-US&include_adult=false&sort_by="+order+"&page=1";
+                            "&language=en-US&include_adult=false&sort_by="+order+"&page="+pageNumber;
                     }
                     else {
                         return getMoviesByGenre(genreId);
@@ -319,8 +329,167 @@
                         return response.data;
                     });
             }
+            
+            function getNowPlayingMovies() {
+                var url = "https://api.themoviedb.org/3/movie/now_playing?api_key="+API_KEY+"&language=en-US&page=1";
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+            
+            function getNowPlayingMoviesByPageNumber(pageNumber) {
+                var url = "https://api.themoviedb.org/3/movie/now_playing?api_key="+API_KEY+
+                    "&language=en-US&include_adult=false&sort_by=created_at.asc&page="+pageNumber;
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
 
+            function getNowPlayingSortedMoviesByPageNumber(attr,order,pageNumber) {
+                if(attr && order) {
+                    var url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + API_KEY +
+                        "&language=en-US&include_adult=false&sort_by=" + attr + "." + order + "&page=" + pageNumber;
+                }
+                else {
+                    if (attr) {
+                        url = "https://api.themoviedb.org/3/movie/now_playing?api_key="+API_KEY+
+                            "&language=en-US&include_adult=false&sort_by="+attr+"&page="+pageNumber;
+                    }
+                    else if(order){
+                        url = "https://api.themoviedb.org/3/movie/now_playing?api_key="+API_KEY+
+                            "&language=en-US&include_adult=false&sort_by="+order+"&page="+pageNumber;
+                    }
+                    else {
+                        return getNowPlayingMoviesByPageNumber(pageNumber);
+                    }
+                }
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+            
+            function getPopularMovies() {
+                var url = "https://api.themoviedb.org/3/movie/popular?api_key="+API_KEY+"&language=en-US&page=1";
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
 
+            function getPopularMoviesByPageNumber(pageNumber) {
+                var url = "https://api.themoviedb.org/3/movie/popular?api_key="+API_KEY+
+                    "&language=en-US&include_adult=false&sort_by=created_at.asc&page="+pageNumber;
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+
+            function getPopularMoviesSortedMoviesByPageNumber(attr,order,pageNumber) {
+                if(attr && order) {
+                    var url = "https://api.themoviedb.org/3/movie/popular?api_key=" + API_KEY +
+                        "&language=en-US&include_adult=false&sort_by=" + attr + "." + order + "&page=" + pageNumber;
+                    console.log(url);
+                }
+                else {
+                    if (attr) {
+                        url = "https://api.themoviedb.org/3/movie/popular?api_key="+API_KEY+
+                            "&language=en-US&include_adult=false&sort_by="+attr+"&page="+pageNumber;
+                        console.log(url);
+                    }
+                    else if(order){
+                        url = "https://api.themoviedb.org/3/movie/popular?api_key="+API_KEY+
+                            "&language=en-US&include_adult=false&sort_by="+order+"&page="+pageNumber;
+                        console.log(url);
+                    }
+                    else {
+                        return getPopularMoviesByPageNumber(pageNumber);
+                    }
+                }
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+            
+            function getTrendingMoviesOfThisYear() {
+                var url = "https://api.themoviedb.org/3/discover/movie?api_key="+API_KEY+
+                            "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=" +
+                            "false&page=1&primary_release_year=2017";
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+
+            function getTrendingMoviesOfThisYearByPageNumber(pageNumber) {
+                var url = "https://api.themoviedb.org/3/discover/movie?api_key="+API_KEY+
+                    "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=" +
+                    "false&page="+pageNumber+"&primary_release_year=2017";
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+            
+            // function getMoviesBySearch(query) {
+            //     var url = "https://api.themoviedb.org/3/search/movie?api_key="+API_KEY+
+            //                 "&language=en-US&query="+query+"&page=1&include_adult=false";
+            //     return $http
+            //         .get(url)
+            //         .then(function (response) {
+            //             return response.data;
+            //         });
+            // }
+            //
+            function getMoviesBySearchByPageNumber(query,pageNumber) {
+                var url = "https://api.themoviedb.org/3/search/movie?api_key="+API_KEY+
+                    "&language=en-US&query="+query+"&page="+pageNumber+"&include_adult=false";
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
+
+            function getMoviesSortedMoviesByPageNumber(attr,order,pageNumber,query) {
+                if(attr && order) {
+                    var url = "https://api.themoviedb.org/3/search/movie?api_key=" + API_KEY +
+                        "&language=en-US&include_adult=false&sort_by=" + attr + "." + order + "&page=" + pageNumber;
+                    console.log(url);
+                }
+                else {
+                    if (attr) {
+                        url = "https://api.themoviedb.org/3/search/movie?api_key="+API_KEY+
+                            "&language=en-US&include_adult=false&sort_by="+attr+"&page="+pageNumber;
+                        console.log(url);
+                    }
+                    else if(order){
+                        url = "https://api.themoviedb.org/3/search/movie?api_key="+API_KEY+
+                            "&language=en-US&include_adult=false&sort_by="+order+"&page="+pageNumber;
+                        console.log(url);
+                    }
+                    else {
+                        return getMoviesBySearchByPageNumber(pageNumber);
+                    }
+                }
+                return $http
+                    .get(url)
+                    .then(function (response) {
+                        return response.data;
+                    });
+            }
         }
     }
 

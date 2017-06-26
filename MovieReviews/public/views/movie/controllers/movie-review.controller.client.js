@@ -16,7 +16,14 @@
         model.deleteReview = deleteReview;
         model.selectReview = selectReview;
         model.cancel = cancel;
-        model.isLoggedIn = isLoggedIn;
+       model.addFollowing=addFollowing;
+       model.unfollow=unfollow;
+       model.searchMovie= searchMovie;
+
+        function searchMovie(query) {
+            $location.url('/movie/search/'+query);
+        }
+
 model.logout = logout;
             function logout() {
                 UserService
@@ -219,7 +226,13 @@ model.logout = logout;
                                 .submitReview(isLoggedIn._id, model.movieId, rating,
                                                 userreview, isLoggedIn.username,movie.title)
                                 .then(function (response) {
-                                    console.log(response);
+                                    model.rating = "";
+                                    model.userreview = "";
+                                    UserService
+                                        .getAllReviews()
+                                        .then(function (reviews) {
+                                            model.userreviews = reviews;
+                                        });
                                 }, function (err) {
                                     console.log(err);
                                 });
@@ -239,6 +252,12 @@ model.logout = logout;
         }
 
         function editReview(reviewId,rating,text) {
+
+            if(typeof rating==='undefined' || typeof text === 'undefined'){
+                model.updateError='Enter rating or review';
+                return ;
+            }
+
             var review = {
                 rating:rating,
                 text:text
@@ -246,7 +265,11 @@ model.logout = logout;
             UserService
                 .editReview(reviewId, review)
                 .then(function (response) {
-                    console.log(response);
+                    UserService
+                        .getAllReviews()
+                        .then(function (reviews) {
+                            model.userreviews = reviews;
+                        });
                 })
         }
 
@@ -254,9 +277,33 @@ model.logout = logout;
             UserService
                 .deleteReview(userId,reviewId)
                 .then(function (response) {
-                    $route.reload();
+                    UserService
+                        .getAllReviews()
+                        .then(function (reviews) {
+                            model.userreviews = reviews;
+                        });
                 })
         }
+
+
+        function addFollowing(followeeId) {
+            var followerId= model.user._id;
+            UserService.addFollowing(followerId,followeeId).then(function () {
+              return  model.user.following.push(followeeId);
+            })
+        }
+
+        function unfollow(followeeId) {
+            var followerId= model.user._id;
+            UserService.unfollow(followeeId,followerId).then(function () {
+               var i = model.user.following.indexOf(followeeId);
+                return  model.user.following.splice(i,1);
+            })
+        }
+
+
+
+
         //     UserService
         //         .checkLoggedIn()
         //         .then(function (user) {

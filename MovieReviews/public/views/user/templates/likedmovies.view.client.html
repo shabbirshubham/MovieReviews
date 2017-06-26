@@ -6,10 +6,11 @@
     <div class="container">
         <div class="page">
             <div >
+                <div class="go-back"><a go-back>Go Back</a></div>
                 <ol class="breadcrumb">
-                    <li><a href="#!/home">Home</a></li>
-                    <li class="active"> Likes</li>
-
+                    <li> <a href="#!/home">Home</a></li>
+                    <li><a href="#!/profile">Profile</a></li>
+                    <li class="active">Likes</li>
                 </ol>
             </div>
             <div class="content">
@@ -22,7 +23,7 @@
                     <div class="col-sm-8">
                         <div class="profile-section row">
                             <h1 class="profile-section-header">Your Likes</h1>
-                            <div class="row" ng-repeat="movie in model.likedmovies">
+                            <div class="row subsection" ng-repeat="movie in model.likedmovies">
                                 <div class="col-sm-4 hidden-xs">
                                     <img src="{{movie.poster_path}}"/>
                                 </div>
@@ -37,11 +38,12 @@
                                         {{genre.name}}<span ng-show=" ! $last ">,</span>
                                         </span>
                                     </div>
+                                    <button class="btn unfollow-btn btn-danger " ng-click="model.deleteLikedMovie(movie.id)">
+                                        Delete
+                                    </button>
                                 </div>
-                                <button class="btn btn-danger btn-block" ng-click="model.deleteLikedMovie(movie.id)">
-                                    Delete
-                                </button>
-                                <hr/>
+
+
                             </div>
                             <div ng-hide="model.likedmovies">
                                 <h1 style="text-align: center" > Your likes are currently empty</h1>
@@ -50,21 +52,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 hidden-xs">
-                        <div class="side-bar">
-                            <div class="profile-section side-bar-section">
-                                <h1 class="profile-section-header">Quick Links</h1>
-                                <ul>
-                                    <li><span><a>Your account</a></span></li>
-                                    <li><span><a>Your account</a></span></li>
-                                    <li><span><a>Your account</a></span></li>
-                                    <li><span><a>Your account</a></span></li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
+                    <div ng-include="'views/common/templates/profile-sidebar.view.client.html'"></div>
                 </div>
             </div>
         </div>

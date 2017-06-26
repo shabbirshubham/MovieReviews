@@ -7,13 +7,17 @@
         function movieSearchCtrl(UserService,MovieService, $location, $routeParams, $sce,isLoggedIn,$route) {
             var model = this;
             model.pagination = pagination;
-            model.query = $routeParams.movie;
+            model.query = $routeParams.query;
             model.search = search;
-            model.isLoggedIn = isLoggedIn;
             model.bookmark = bookmark;
             model.removebookmark = removebookmark;
             model.likeMovie = likeMovie;
             model.unlikeMovie = unlikeMovie;
+            model.searchMovie = searchMovie;
+
+            function searchMovie(query) {
+                $location.url('/movie/search/'+query);
+            }
 model.logout = logout;
             function logout() {
                 UserService
@@ -28,33 +32,37 @@ model.logout = logout;
                 MovieService
                     .getMovieIdBySearch(model.query)
                     .then(function (response) {
-                        MovieService
-                            .getConfig()
-                            .then(function (configs) {
-                                var baseURL = configs.images.secure_base_url + "";
-                                var size = configs.images.profile_sizes[2];
-                                var poster_config_path = baseURL + size;
-                                getMovieInfo(response, poster_config_path);
-                            });
+                        if(response.total_results <= 0)
+                            $location.url('/search/notFound');
+                        else {
+                            MovieService
+                                .getConfig()
+                                .then(function (configs) {
+                                    var baseURL = configs.images.secure_base_url + "";
+                                    var size = configs.images.profile_sizes[2];
+                                    var poster_config_path = baseURL + size;
+                                    getMovieInfo(response, poster_config_path);
+                                });
+                        }
                     });
 
-                UserService
-                    .getMoviesFromWatchList(isLoggedIn._id)
-                    .then(function (movies) {
-                        var movieIds = [];
-                        for(m in movies)
-                            movieIds.push(movies[m].id);
-                        model.watchListMovies = movieIds;
-                    });
+                // UserService
+                //     .getMoviesFromWatchList(isLoggedIn._id)
+                //     .then(function (movies) {
+                //         var movieIds = [];
+                //         for(m in movies)
+                //             movieIds.push(movies[m].id);
+                //         model.watchListMovies = movieIds;
+                //     });
 
-                UserService
-                    .getLikedMovies(isLoggedIn._id)
-                    .then(function (movies) {
-                        var movieIds = [];
-                        for(m in movies)
-                            movieIds.push(movies[m].id);
-                        model.likedMovies = movieIds;
-                    })
+                // UserService
+                //     .getLikedMovies(isLoggedIn._id)
+                //     .then(function (movies) {
+                //         var movieIds = [];
+                //         for(m in movies)
+                //             movieIds.push(movies[m].id);
+                //         model.likedMovies = movieIds;
+                //     })
             }
             init();
 
@@ -181,7 +189,7 @@ model.logout = logout;
                         if((model.attribute === "" || model.attribute === undefined)
                             && (model.order === undefined || model.order === "")) {
                             MovieService
-                                .getRecentMoviesByPageNumber(pageNumber)
+                                .getMoviesBySearchByPageNumber(pageNumber)
                                 .then(function (response) {
                                     getMovieInfo(response,poster_config_path,pageNumber);
                                 });

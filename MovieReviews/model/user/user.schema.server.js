@@ -10,7 +10,7 @@ var userSchema = mongoose.Schema({
     email: String,
     imgUrl: String,
     phone: String,
-    url: String,
+    url: {type:String,default:'/uploads/user-profile-pictures/profile.png'},
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'}],
     following: [{type: mongoose.Schema.Types.ObjectId, ref: 'UserModel'}],
     role: {type: String, enum: ['user','critic', 'admin'], default: 'user'},

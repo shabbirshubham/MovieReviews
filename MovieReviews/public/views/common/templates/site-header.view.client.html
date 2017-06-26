@@ -21,6 +21,7 @@
     <div class="container">
         <!-- #branding -->
         <nav class="navbar navbar-default">
+
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" style="margin-top: 15px;">
                         <span class="sr-only">Toggle navigation</span>
@@ -28,12 +29,29 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand pull-left" href="#!/home2">
-                        <img src="https://res.cloudinary.com/candidbusiness/image/upload/v1455406304/dispute-bills-chicago.png" alt="Dispute Bills">
+                    <a class="navbar-brand pull-left" href="#!/home">
+                        <img src="../../../images/website-logo.jpg" style="height: 50px;padding: 0 0 0 10px;" alt="MovieViews">
                     </a>
                 </div>
+
+
                 <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+
                     <ul class="nav navbar-nav navbar-right">
+
+                        <li>
+                            <form class="navbar-form">
+                                <div class="input-group ">
+                                    <input type="text" class="form-control" ng-model="model.query" placeholder="Search">
+                                    <span class="input-group-btn">
+                                        <button  ng-click="model.searchMovie(model.query)" class="btn btn-default form-search-submit" type="button">
+                                            <span class="fa fa-search"></span>
+                                            <!--<span><img src="../../../images/search.jpg"></span>-->
+                                        </button>
+                                  </span>
+                                </div>
+                            </form>
+                        </li>
                         <li><a href="#">Home <span class="sr-only">(current)</span></a></li>
                         <li class="dropdown">
                             <a  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Movies<span class="caret"></span></a>
@@ -103,33 +121,36 @@
                                 <li><a href="#!/user/watchlist">Watch List</a></li>
                                 <li><a href="#!/user/user_reviews">Your Reviews</a></li>
                                 <li><a href="#!/user/account">Account Settings</a></li>
+                                <li ng-if="model.user.role.indexOf('admin')!= -1"><a href="#!/admin/dashboard">Dashboard</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a  ng-click="model.logout()">Log out</a></li>
                             </ul>
                         </li>
-                        <li class="navbar hidden-xs">
-                            <form class="navbar-form form-search ngen-search-form">
-                                <div class="input-group ">
-                                    <input id="search-input" type="text" class="form-control form-search-input" placeholder="Search">
-                                    <span class="input-group-btn">
-                                        <button id="search-trigger" class="btn btn-default form-search-submit" type="button"> <span class="fa fa-search"></span></button>
-                                  </span>
-                                </div>
-                            </form>
-                        </li>
-                        <li class="navbar hidden-sm hidden-md hidden-lg">
-                            <form class="navbar-form">
-                                <div class="input-group ">
-                                    <input type="text" class="form-control" ng-model="model.query" placeholder="Search">
-                                    <span class="input-group-btn">
-                                        <button  ng-click="model.searchMovie(model.query)" class="btn btn-default form-search-submit" type="button">
-                                            <span class="fa fa-search"></span>
-                                            <!--<span><img src="../../../images/search.jpg"></span>-->
-                                        </button>
-                                  </span>
-                                </div>
-                            </form>
-                        </li>
+
+                        <!--<li class="navbar hidden-xs">-->
+                            <!--<form class="navbar-form form-search ngen-search-form">-->
+                                <!--<div class="input-group ">-->
+                                    <!--<input id="search-input" type="text" class="form-control form-search-input" placeholder="Search">-->
+                                    <!--<span class="input-group-btn">-->
+                                        <!--<button id="search-trigger" class="btn btn-default form-search-submit" type="button">-->
+                                            <!--<span class="fa fa-search"></span></button>-->
+                                  <!--</span>-->
+                                <!--</div>-->
+                            <!--</form>-->
+                        <!--</li>-->
+                        <!--<li class="navbar hidden-sm hidden-md hidden-lg">-->
+                            <!--<form class="navbar-form">-->
+                                <!--<div class="input-group ">-->
+                                    <!--<input type="text" class="form-control" ng-model="model.query" placeholder="Search">-->
+                                    <!--<span class="input-group-btn">-->
+                                        <!--<button  ng-click="model.searchMovie(model.query)" class="btn btn-default form-search-submit" type="button">-->
+                                            <!--<span class="fa fa-search"></span>-->
+                                            <!--&lt;!&ndash;<span><img src="../../../images/search.jpg"></span>&ndash;&gt;-->
+                                        <!--</button>-->
+                                  <!--</span>-->
+                                <!--</div>-->
+                            <!--</form>-->
+                        <!--</li>-->
 
 
                     </ul>
@@ -139,6 +160,7 @@
         </nav>
 
     </div>
+
 </div>
 <div ng-include="'views/common/templates/login.view.client.html'"></div>
 </header>

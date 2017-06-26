@@ -1,103 +1,99 @@
-<hr/>
+
 <div class="content">
-    <form>
-        <span>Sort By:</span>
-        <br/>
-        <select ng-model="model.attribute" name="attr" style="width: 150px !important;">
-            <option ng-selected="model.attribute == ''" value=''>Please Select</option>
-            <option ng-selected="model.attribute == 'popularity'" value='popularity'>Popularity</option>
-            <option ng-selected="model.attribute == 'release_date'" value='release_date'>Recently Released</option>
-            <option ng-selected="model.attribute == 'revenue'" value='revenue'>Revenue</option>
-            <option value="vote_average">Average Rating</option>
-        </select>
-        <br/>
-        <br/>
-        <span>Order By:</span>
-        <br/>
-        <select ng-model="model.order" name="sort" style="width: 150px !important;">
-            <option value="" selected="selected">Please Select</option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
 
-        <button style="margin-top: 10px" class="btn btn-info btn-block" ng-click="model.search(model.attribute,model.order)">
-            Search
-        </button>
-    </form>
-</div>
-<!--<div class="container-fluid">
-    <div class="dropdown pull-right">
-        <span>Sort By</span>
-        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
-            <span class="caret"></span></button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">HTML</a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">CSS</a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">JavaScript</a></li>
-            <li role="presentation" class="divider"></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">About Us</a></li>
-        </ul>
-    </div>
-</div>-->
+    <div class="page-section sorter ">
+            <div class="row">
+                <div class="col-xs-6 col-sm-12">
+                    Sort By:
+                    <select ng-model="model.attribute"  name="attr" >
+                        <option ng-selected="model.attribute == ''" value=''>Select</option>
+                        <option ng-selected="model.attribute == 'popularity'" value='popularity'>Popularity</option>
+                        <option ng-selected="model.attribute == 'release_date'" value='release_date'>Recently Released</option>
+                        <option ng-selected="model.attribute == 'revenue'" value='revenue'>Revenue</option>
+                        <option value="vote_average">Average Rating</option>
+                    </select>
 
-<hr/>
+                    OrderBy
 
-<div class="row">
-    <div class="col-sm-2 hidden-xs"></div>
-    <div class="col-sm-5 col-xs-5" style="color: #b92c28;font-size: 20px;">
-        Title and Release Year
-    </div>
-    <div class="col-sm-3 col-xs-4" style="color: #b92c28;font-size: 20px;">
-        TMDB Rating
-    </div>
-    <div class="col-sm-2 col-xs-3" style="color: #b92c28;font-size: 20px;">
-        Watch/Like
-    </div>
-</div>
-
-
-<div ng-repeat="movie in model.movies" class="row">
-    <hr/>
-    <div class="col-sm-2 hidden-xs">
-        <!--<span style="display:inline"> {{$index+1 + model.pagenumber}} .</span>-->
-        <img ng-src={{movie.poster_path}} height="100" alt="No Image Found">
-    </div>
-    <div class="col-sm-5 col-xs-5">
-        <h3><a href="#!/movie/{{movie.id}}">{{movie.title}}</a>
-            <span>({{movie.release_date}})</span>
-        </h3>
-        <p>
-        {{movie.overview}}
-        </p>
-    </div>
-    <div class="col-sm-3 col-xs-4">
-            <span>
-                <h3>{{movie.vote_average}}
-                    <span class="fa fa-star" style="padding-left:5px;"></span>
-                    ({{movie.vote_count}} votes)</h3>
-            </span>
-        <!--<div class="star-ratings-css">-->
-            <!--<div class="star-ratings-css-top" ng-style="{'width':{{movie.vote_average}}*(100/5)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>-->
-            <!--<div class="star-ratings-css-bottom">-->
-                <!--<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>-->
-            <!--</div>-->
-        <!--</div>-->
-    </div>
-    <div class="col-sm-2 col-xs-3">
-        <span>
-            <a ng-hide="model.watchListMovies.indexOf(movie.id)>-1" href="" ng-click="model.bookmark(movie.id)" class="fa fa-bookmark"></a>
-        </span>
-        <span>
-            <a ng-show="model.watchListMovies.indexOf(movie.id)>-1" href="" ng-click="model.removebookmark(movie.id)" class="fa fa-check"></a>
-        </span>
-        <span style="font-size: 30px">
-            <a ng-hide="model.likedMovies.indexOf(movie.id)>-1" href="" ng-click="model.likeMovie(movie.id)" class="fa fa-thumbs-o-up"></a>
-        </span>
-        <span style="font-size: 30px">
-            <a ng-show="model.likedMovies.indexOf(movie.id)>-1" href="" ng-click="model.unlikeMovie(movie.id)" class="fa fa-thumbs-up"></a>
-        </span>
+                        <select ng-model="model.order" name="sort" >
+                            <option value="" selected="selected">Select</option>
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    <button class="btn unfollow-btn btn-info " ng-click="model.search(model.attribute,model.order)">
+                        Search
+                    </button>
+                </div>
+            </div>
     </div>
 
+   <div class="page-section hidden-xs">
+       <div class="row  sorter ">
+             <div class="col-xs-12 col-sm-7 hidden-xs">
+                <div class=''>
+                    <p style="color: #b92c28;font-size: 20px; margin-left: 160px;"> Title and Release Year
+                    </p>
+                </div>
+             </div>
+               <div class="col-sm-3"><p  style="color: #b92c28;font-size: 20px; "> TMDB Rating</p></div>
+                <div class="col-sm-1 hidden-xs" style="color: #b92c28;font-size: 20px;">
+                    Watch/Like
+                </div>
+
+        </div>
+   </div>
+
+
+   <div class="">
+         <div ng-repeat="movie in model.movies" class="row page-section">
+
+              <div class="movie-list">
+                  <div class="col-xs-12 col-sm-7 ">
+                      <!--<span style="display:inline"> {{$index+1 + model.pagenumber}} .</span>-->
+                      <figure >
+                         <img id="user-picture" class="col-xs-4" ng-src={{movie.poster_path}}  alt="No Image Found">
+                     </figure>
+                     <a href="#!/movie/{{movie.id}}"> <p class="movie-name" >{{movie.title}}
+                          <span>({{movie.release_date}})</span>
+                      </p></a>
+                     <p class="movie-like hidden-sm hidden-md hidden-lg "><span>
+                            <a style="padding-right:15px;" ng-hide="model.watchListMovies.indexOf(movie.id)>-1" href="" ng-click="model.bookmark(movie.id)" class="fa fa-plus"></a>
+                            </span>
+                                  <span>
+                            <a style="padding-right:15px;" ng-show="model.watchListMovies.indexOf(movie.id)>-1" href="" ng-click="model.removebookmark(movie.id)" class="fa fa-check"></a>
+                        </span>
+                                  <span style="font-size: 30px">
+                            <a ng-hide="model.likedMovies.indexOf(movie.id)>-1" href="" ng-click="model.likeMovie(movie.id)" class="fa fa-thumbs-o-up"></a>
+                        </span>
+                                  <span style="font-size: 30px">
+                            <a ng-show="model.likedMovies.indexOf(movie.id)>-1" href="" ng-click="model.unlikeMovie(movie.id)" class="fa fa-thumbs-up"></a>
+                        </span>
+                      </p>
+
+                  </div>
+                  <div class="col-sm-3 hidden-xs">
+                        <p class="movie-rating  ">{{movie.vote_average}}
+                            <span class="fa fa-star" style="padding-left:5px;padding-right:5px; color: #ffd700"></span><strong>({{movie.vote_count}} votes)</strong>
+                        </p>
+                  </div>
+                <div class="col-sm-2 col-xs-4 hidden-xs">
+                    <p class="movie-like"><span>
+                        <a style="padding-right:15px;" ng-hide="model.watchListMovies.indexOf(movie.id)>-1" href="" ng-click="model.bookmark(movie.id)" class="fa fa-plus"></a>
+                    </span>
+                    <span>
+                        <a style="padding-right:15px;" ng-show="model.watchListMovies.indexOf(movie.id)>-1" href="" ng-click="model.removebookmark(movie.id)" class="fa fa-check"></a>
+                    </span>
+                    <span style="font-size: 30px">
+                        <a ng-hide="model.likedMovies.indexOf(movie.id)>-1" href="" ng-click="model.likeMovie(movie.id)" class="fa fa-thumbs-o-up"></a>
+                    </span>
+                    <span style="font-size: 30px">
+                        <a ng-show="model.likedMovies.indexOf(movie.id)>-1" href="" ng-click="model.unlikeMovie(movie.id)" class="fa fa-thumbs-up"></a>
+                    </span>
+                    </p>
+                </div>
+             </div>
+         </div>
+   </div>
         <!--<p>-->
             <!--{{movie.overview}}-->
         <!--</p>-->
@@ -113,7 +109,7 @@
                     <!--{{actor.name}}<span ng-show=" ! $last ">,</span>-->
                     <!--</span>-->
         <!--</p>-->
-</div>
+
 <!--<div class="table-responsive">-->
 <!--<table class="table">-->
 <!--<thead>-->
@@ -158,11 +154,13 @@
 <!--</tbody>-->
 <!--</table>-->
 <!--</div>-->
-
-<ul class="pagination pagination-lg">
-    <li><a href="" ng-click="model.pagination(1)">1</a></li>
-    <li><a href="" ng-click="model.pagination(2)">2</a></li>
-    <li><a href="" ng-click="model.pagination(3)">3</a></li>
-    <li><a href="" ng-click="model.pagination(4)">4</a></li>
-    <li><a href="" ng-click="model.pagination(5)">5</a></li>
-</ul>
+<div class="center-align">
+    <ul class="pagination pagination-lg">
+        <li><a href="" ng-click="model.pagination(1)">1</a></li>
+        <li><a href="" ng-click="model.pagination(2)">2</a></li>
+        <li><a href="" ng-click="model.pagination(3)">3</a></li>
+        <li><a href="" ng-click="model.pagination(4)">4</a></li>
+        <li><a href="" ng-click="model.pagination(5)">5</a></li>
+    </ul>
+</div>
+</div>

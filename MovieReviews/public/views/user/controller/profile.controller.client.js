@@ -13,9 +13,18 @@
         model.curUrl = $location.path();
         model.deleteUser=deleteUser;
         model.updateUser=updateUser;
-        model.getFollowings=getFollowings;
-        model.getFollowers=getFollowers;
-        model.removeFollowing=removeFollowing;
+        model.unfollow=unfollow;
+        model.viewPerson=viewPerson;
+        model.gotoFollowingPerson=gotoFollowingPerson;
+        model.gotoFollower=gotoFollower;
+        model.username=model.user.username;
+        model.email=model.user.email;
+        model.firstName=model.user.firstName;
+        model.lastName=model.user.lastName;
+        model.checkPassword=checkPassword;
+        model.changePassword=changePassword;
+        model.searchMovie = searchMovie;
+
         function init() {
             model.userId = isLoggedIn._id;
 
@@ -38,9 +47,24 @@
                     if(likedmovies.length>0)
                         model.likedmovies = likedmovies;
                 });
-        }
 
-        init();
+                UserService
+                    .getFollowings(model.userId)
+                    .then(function (following) {
+                        return  model.following=model.user.following=following;
+                    });
+
+
+                UserService
+                    .getFollowers(model.userId)
+                    .then(function (followers) {
+                        return  model.followers=model.user.followers=followers;
+                    });
+        }init();
+
+        function searchMovie(query) {
+            $location.url('/movie/search/'+query);
+        }
 
         function logout() {
             UserService
@@ -55,7 +79,11 @@
             
         }
         function updateUser() {
-
+            UserService
+                .updateUser(model.user._id,model.user)
+                .then(function (status) {
+                    model.updateSucces='Profile Updated';
+                })
         }
 
         function deleteMovie(movieId) {
@@ -87,30 +115,65 @@
                 });
         }
 
-function getFollowings(userId) {
 
-            return UserService
-                .getFollowings(userId)
-                .then(function (following) {
-                  return  model.user.following=following;
-                })
+        function unfollow(followeeId) {
+            var followerId= model.user._id;
+            UserService.unfollow(followeeId,followerId).then(function () {
+
+                for(var i in model.user.following){
+                    var following = model.user.following[i];
+                    if(following._id===followeeId){
+                        return model.user.following.splice(i,1);
+                    }
+                }
+            })
         }
 
-        function getFollowers(userId) {
-
-            return UserService
-                .getFollowers(userId)
-                .then(function (follower) {
-                  return  model.user.follower=follower;
-                })
+        function viewPerson(id) {
+            model.watchingProfile = id;
         }
 
-        function removeFollowing(followeeId,userId) {
-            return UserService
-                .removeFollowing(userId)
-                .then(function () {
+        function gotoFollowingPerson(personId) {
+            for(var i in model.following){
+                var person=model.following[i];
+                if(personId === person._id){
+                    model.person = person;
+                    $location.url('/user/view_person/'+personId);
+                }
+            }
+        }
 
-                })
+        function gotoFollower(personId) {
+            for(var i in model.followers){
+                var person=model.followers[i];
+                if(personId === person._id){
+                    model.person = person;
+                    $location.url('/user/view_person/'+personId);
+                }
+            }
+        }
+
+        function checkPassword() {
+
+                return model.pwdMismatch='';
+        }
+
+        function changePassword(newPwd,oldPwd) {
+            if(newPwd !== model.confirmPwd){
+                return model.pwdMismatch=true;
+            }
+            UserService
+                .changePassword(model.user._id,newPwd,oldPwd)
+                .then(function (response) {
+
+                    if(response ==='OK'){
+                        model.pwdUpdateSuccess='Password Updated';
+                    }
+                    else{
+                        model.pwdUpdateFailure=response;
+                    }
+
+                });
         }
 
     }

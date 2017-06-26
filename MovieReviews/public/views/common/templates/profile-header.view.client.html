@@ -2,7 +2,7 @@
     <div class="col-xs-12">
         <div id="user-picture">
             <img id="avatar" style="height: 145px;width: 120px" class="image"
-                 ng-src={{model.user.url}}>
+                 ng-src={{model.user.url}} onerror="this.src='../../../images/profile.png;'">
             <label for="profilePic" style="color: #337ab7;cursor: pointer;font-size: 10px">Change Picture</label>
             <!--<div class="fake"><span><a href>Link!</a><input type='file' /><span>-->
             <div>

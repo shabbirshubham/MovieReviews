@@ -6,10 +6,10 @@
     <div class="container">
         <div class="page">
             <div >
-               <ol class="breadcrumb">
-                <li><a href="#!/home">Home</a></li>
-                <li class="active"> Profile</li>
-
+                <div class="go-back"><a go-back>Go Back</a></div>
+                <ol class="breadcrumb">
+                    <li> <a href="#!/home">Home</a></li>
+                    <li class="active">Profile</li>
                 </ol>
             </div>
             <div class="content">
@@ -21,7 +21,7 @@
                     <!--<h2>Profile page</h2>-->
                     <div class="col-sm-8">
                         <div class="profile-section row">
-                            <h1 class="profile-section-header"><a href="#!/user/watchlist">Your Watch list</a></h1>
+                            <h1 class="profile-section-header">Your Watch list</h1>
                            <div ng-show="model.movies" class="row image-list">
                                 <a href="#!/user/watchlist">
                                     <div class="col-xs-4"><img src="{{model.movies[0].poster_path}}" alt="image 1">
@@ -45,7 +45,7 @@
                         </div>
 
                         <div ng-show="model.userreviews" class="profile-section">
-                            <h1 class="profile-section-header"><a href="#!/user/user_reviews">You reviewed {{model.userreviews.length}} movies</a></h1>
+                            <h1 class="profile-section-header">You reviewed {{model.userreviews.length}} movies</h1>
                             <p>See all your reviews <a href="#!/user/user_reviews">here</a></p>
                         </div>
 
@@ -54,53 +54,76 @@
                             <p>Loved or hated a movie or TV show? Write a review and share it with others!</p>
                         </div>
 
-                        <div class="profile-section" ng-hide="model.likedmovies">
-                            <p>Like a movie to see your movie preferences!!!</p>
-                        </div>
 
-                        <div class="profile-section" ng-show="model.likedmovies">
-                            <h1 class="profile-section-header"><a href="#!/user/likedmovies">Your Likes</a></h1>
-                            <p>You liked
-                                <a href="#!/movie/{{model.likedmovies[0].id}}">
-                                    <span style="color: #b92c28">{{model.likedmovies[0].title}}</span>
-                                </a>
-                                <span ng-show="model.likedmovies.length>1">
-                                and
-                                <a href="#!/user/likedmovies" style="color: #b92c28">{{model.likedmovies.length-1}}</a> more
-                                </span>
-                            </p>
+                        <div class="profile-section">
+                            <h1 class="profile-section-header">Your Likes</h1>
+                            <div  ng-show="model.likedmovies">
+                                <p>You liked
+                                    <a href="#!/movie/{{model.likedmovies[0].id}}">
+                                        <span style="color: #b92c28">{{model.likedmovies[0].title}}</span>
+                                    </a>
+                                    <span ng-show="model.likedmovies.length>1">
+                                    and
+                                    <a href="#!/user/likedmovies" style="color: #b92c28">{{model.likedmovies.length-1}}</a> more
+                                    </span>
+                                </p>
+                            </div>
+                            <div ng-hide="model.likedmovies">
+                                <p>Like a movie to see your movie preferences!!!</p>
+                            </div>
                         </div>
-
-<div class="profile-section">
+                         <div class="profile profile-section">
                             <h1 class="profile-section-header">Your Followers</h1>
-                            <div ng-show="model.user.followers.length ===0">
-                                <p>Currently you don't have any followers.</p>
-                            </div>
-                            <div ng-show="model.user.followers.length!==0">
-                                <ul>
-                                    <li>
+                             <div ng-show="model.user.followers" class="row image-list">
 
-                                    </li>
-                                </ul>
-                            </div>
+                                     <div ng-repeat="follower in model.user.followers|limitTo:3" class="col-sm-4 col-xs-12">
+
+                                         <figure>
+                                             <!--<object data="{{follower.url}}" width=200 height=200>-->
+
+                                                 <img onerror="this.src='../../../images/profile.png;'" style="width:120px;height:145px" ng-src="{{follower.url}}">
+                                             <!--</object>-->
+                                             <figcaption class="user-name-caption"><a ng-click="model.gotoFollower(follower._id)"><h4>{{follower.username}}</h4></a></figcaption>
+                                         </figure>
+
+                                     </div>
+                             </div>
+                             <div class="see-more" ng-show="model.user.followers">
+                                 <h5><span><a href="#!/user/followers">See all >></a></span></h5>
+                             </div>
+
+
+
+                             <div ng-hide="model.user.followers">
+                                 <p>Currently tou don't have any followers.</p>
+                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4 hidden-xs">
-                            <div class="side-bar">
-                                <div class="profile-section side-bar-section">
-                                    <h1 class="profile-section-header">Quick Links</h1>
-                                    <ul>
-                                        <li style="margin-bottom: 10px"><span><a href="#!/user/account">Your account</a></span></li>
-                                        <li style="margin-bottom: 10px"><span><a>Reviews</a></span></li>
-                                        <li style="margin-bottom: 10px"><span><a>Watchlist</a></span></li>
-                                        <li style="margin-bottom: 10px"><span><a>Followers</a></span></li>
-                                        <li style="margin-bottom: 10px"><span><a>Likes</a></span></li>
 
-                                    </ul>
+                        <div class="profile profile-section">
+                            <h1 class="profile-section-header">People You Follow</h1>
+                            <div ng-show="model.user.following" class="row image-list">
+
+                                <div ng-repeat="following in model.user.following|limitTo:3" class="col-sm-4 col-xs-12">
+
+                                    <figure>
+                                            <img onerror="this.src='../../../images/profile.png;'" style="width:120px;height:145px" ng-src="{{following.url}}">
+                                        <figcaption class="user-name-caption"><a ng-click="model.gotoFollowingPerson(following._id)" ><h4>{{following.username}}asdadsadsasdsadasdasdasdasdadas</h4></a></figcaption>
+                                    </figure>
+
                                 </div>
                             </div>
-                    </div>
+                            <div class="see-more" ng-show="model.user.following.length !==0">
+                                <h5><span><a href="#!/user/following">See all >></a></span></h5>
+                            </div>
 
+
+
+                            <div ng-hide="model.user.following.length!==0">
+                                <p>Currently tou don't have any followers.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-include="'views/common/templates/profile-sidebar.view.client.html'"></div>
                 </div>
             </div>
         </div>

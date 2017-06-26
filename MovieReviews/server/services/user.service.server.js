@@ -20,12 +20,17 @@
     // All URI
 
         app.post('/api/project/login',passport.authenticate('local'),login);
+        app.post('/api/project/user',isAdmin,createUser);
         app.post('/api/project/register',register);
+        app.post('/api/project/unregister',unregister);
         app.get('/api/project/checkLoggedIn',checkLoggedIn);
+        app.get('/api/project/admin/checkAdmin',checkAdmin);
         app.post('/api/project/logout',logout);
-        app.put('/api/project/updateUser:userId',updateUser);
+        app.put('/api/project/updateUser/:userId',updateUser);
+        app.post('/api/project/changePassword/:userId',changePassword);
         app.get('/api/project/findUserByUsername',findUserByUsername);
-        app.delete('/api/project/deleteUser:userId',deleteUser);
+        app.get('/api/project/findUserById/:userId',findUserById);
+        app.delete('/api/project/deleteUser/:userId',isAdmin,deleteUser);
         app.post('/api/project/addToWatchList/:userId',addToWatchList);
         app.delete('/api/project/deleteMoviesFromWatchList/:movieId/user/:userId',deleteMoviesFromWatchList);
         app.get('/api/project/getMoviesFromWatchList/:userId',getMoviesFromWatchList);
@@ -38,11 +43,14 @@
         app.delete('/api/project/deleteReview/user/:userId/review/:reviewId',deleteReview);
         app.post ("/api/project/uploadProfileImage", upload.single('myFile'), uploadImage);
         app.get('/api/project/getFollowers/:userId',getFollowers);
-        app.get('/api/project/getFollowings/:userId',getFollowings);
-        app.put('/api/project/addFollower/followerId/:followerId/follower/:followeeId',addFollower);
-        app.put('/api/project/addFollowings/followerId/:followerId/follower/:followeeId',addFollowing);
-        app.delete('/api/project/removeFollowing/followee/:followerId/follower/:followeeId',removeFollowing);
+        app.get('/api/project/getFollowings/:userId',getFollowing);
+        app.get('/api/project/getPersonById/:userId',getPersonById);
+        app.put('/api/project/addFollower/follower/:followerId/followee/:followeeId',addFollower);
+        app.put('/api/project/addFollowing/follower/:followerId/followee/:followeeId',addFollowing);
+        app.delete('/api/project/unfollow/follower/:followerId/followee/:followeeId',unfollow);
         app.get('/api/project/getAllReviews',getAllReviews);
+        app.get('/api/project/getAllUsers',isAdmin,getAllUsers);
+        app.delete('/api/project/deleteUserReviews/user/:userId',deleteUserReviews);
 
         app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
         app.get('/google/callback',
@@ -78,6 +86,23 @@
         passport.use(new FacebookStrategy(facebookConfig, facebookStrategy));
 //------------------------------------------------------------
         // ALL function definitions
+        
+        function isAdmin(req,res,next) {
+            if(req.isAuthenticated() && req.user.role.indexOf('admin')>-1){
+                next();
+            }else{
+                res.sendStatus(401);
+            }
+        }
+
+        function findUserById(req,res) {
+            var userId = req.params.userId;
+            userModel.findUserById(userId).then(function (user) {
+                res.json(user);
+            },function (err) {
+                res.sendStatus(404);
+            })
+        }
 
         function localStrategy(username, password, done) {
                 userModel
@@ -90,9 +115,9 @@
                               return done(null,false);
                         }
                     },function (err) {
-                        return done(err);
+                        if (err) { return done(err); }
                     })
-        }
+         }
 
         function login(req,res) {
                 var user = req.user;
@@ -114,8 +139,24 @@
                 })
         }
 
+        function unregister(req,res) {
+            var user = req.body;
+            userModel
+                .deleteUser(user._id)
+                .then(function (user) {
+                    req.logout();
+                    res.sendStatus(200);
+                },function () {
+                    res.sendStatus(404);
+                })
+        }
+
         function checkLoggedIn(req,res) {
                 res.send(req.isAuthenticated()? req.user:'0');
+        }
+        
+        function checkAdmin(req,res) {
+            res.send(req.isAuthenticated() && req.user.role.indexOf('admin')>-1? req.user:'0');
         }
 
         function logout(req,res) {
@@ -131,6 +172,30 @@
                 .then(function () {
                     res.sendStatus(200);
                 })
+        }
+
+
+        function changePassword(req,res) {
+            var userId = req.params.userId;
+            var newPwd = req.body.newPwd;
+            var oldPwd = req.body.oldPwd;
+            userModel.findUserById(userId)
+                .then(function (user) {
+                    if(user && bcrypt.compareSync(oldPwd,user.password)){
+
+                        newPwd=bcrypt.hashSync(newPwd);
+                        var user={
+                            password:newPwd
+                        };
+                        userModel.changePassword(userId,user)
+                            .then(function () {
+                                res.sendStatus(200);
+                            })
+                    }
+                    else{
+                        return res.sendStatus(404);
+                    }
+            })
         }
 
         function findUserByUsername(req,res) {
@@ -258,6 +323,7 @@
             var size          = myFile.size;
             var mimetype      = myFile.mimetype;
             var url= '/uploads/user-profile-pictures/'+filename;
+
             var callbackUrl=req.body.callbackUrl;
             //widget = getWidgetById(widgetId);
 
@@ -265,15 +331,15 @@
                 .uploadProfileImage(userId,url)
                 .then(function (status) {
                     //var callbackUrl   = "/#!/profile";
-                    // res.sendStatus(200);
-                    res.redirect(callbackUrl);
+                     //res.sendStatus(200);
+                   res.redirect(callbackUrl);
                 });
             //widget.url = '/assignment/uploads/'+filename;
 
 
         }
         function addFollower(req,res) {
-            var followerId = req.followerId;
+            var followerId = req.params.followerId;
             var followeeId= req.followeeId;
             userModel.addFollower(followeeId,followerId).then(function () {
                 res.sendStatus(200);
@@ -282,36 +348,48 @@
         }
         function addFollowing(req,res) {
 
-            var followerId = req.followerId;
-            var followeeId= req.followeeId;
-            userModel.addFollowing(followeeId,followerId).then(function () {
+            var followerId = req.params.followerId;
+            var followeeId= req.params.followeeId;
+            userModel.addFollowing(followeeId,followerId).then(function (user) {
                 res.sendStatus(200);
+            },function (err) {
+                console.log(err);
+                res.sendStatus(404);
             })
 
         }
 
         function getFollowers(req,res) {
 
-            var userId = req.userId;
+            var userId = req.params.userId;
             userModel.getFollowers(userId)
                 .then(function (user) {
                     res.json(user.followers);
                 })
         }
 
-        function getFollowings(req,res) {
-            var userId = req.userId;
+        function getPersonById(req,res) {
+
+            var userId = req.params.userId;
+            userModel.getPersonById(userId)
+                .then(function (user) {
+                    res.json(user);
+                })
+        }
+
+        function getFollowing(req,res) {
+            var userId = req.params.userId;
             userModel.getFollowings(userId)
                 .then(function (user) {
                     res.json(user.following);
                 })
         }
 
-        function removeFollowing(req,res) {
-            var followerId = req.followerId;
-            var followeeId= req.followeeId;
+        function unfollow(req,res) {
+            var followerId = req.params.followerId;
+            var followeeId= req.params.followeeId;
             userModel
-                .removeFollowing(followeeId,followerId)
+                .unfollow(followeeId,followerId)
                 .then(function () {
                 res.sendStatus(200);
             })
@@ -482,4 +560,40 @@
         //             res.sendStatus(404);
         //         });
         // }
+        
+        function getAllUsers(req,res) {
+            userModel
+                .getAllUsers()
+                .then(function (users) {
+                    res.send(users);
+                },function (err) {
+                    res.sendStatus(404);
+                })
+        }
+        
+        function createUser(req,res) {
+            var user = req.body;
+            user.password=bcrypt.hashSync(user.password);
+            userModel
+                .createUser(user)
+                .then(function (user) {
+                    res.send(user);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                });
+        }
+
+        function deleteUserReviews(req,res) {
+            var userId = req.params.userId;
+            return reviewModel
+                .deleteUserReviews(userId)
+                .then(function (response) {
+                    console.log(response);
+                    res.sendStatus(200);
+                },function (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                })
+        }
 

@@ -3,12 +3,13 @@
     angular.module('WDP')
         .controller('topNewsCtrl',topNewsCtrl);
     
-    function topNewsCtrl($http,isLoggedIn,UserService,$location,$window) {
+    function topNewsCtrl($http,isLoggedIn,UserService,$location,$window,NewsService) {
 
         var model = this;
         model.isLoggedIn=isLoggedIn;
         model.logout = logout;
         model.redirectTo=redirectTo;
+        model.searchMovie  = searchMovie;
         function redirectTo(url) {
             $window.open(url);
         }
@@ -19,18 +20,14 @@
                     $location.url('/');
                 });
         }
-        //var url ='http://newsapi.org/v1/articles?source=techcrunch&apiKey=e652550722294cb5b5ef87e76ae5e2f3';
-        var url ='http://content.guardianapis.com/search?&format=json&tag=film/film,tone/news&show-fields=trailText,byline,thumbnail,shortUrl&from-date=2017-06-01&&order-by=newest&api-key=d5457e48-805f-4353-aca6-32df568fab15';
+        function searchMovie(query) {
+            $location.url('/movie/search/'+query);
+        }
         function init() {
-            $http
-                .get(url)
-                .then(function (response) {
-                    console.log(response);
-                    //model.allNews=response.data.articles;
-                    model.allNews = response.data.response.results;
-                    //model.allNews.webPublicationDate = model.allNews.webPublicationDate.toUTCString();
-                })
 
+           return NewsService.getTopNews().then(function (news) {
+               model.allNews= news;
+            })
         }init();
 
         // function getAllNews() {

@@ -1,16 +1,13 @@
 (function () {
 
-    angular.module("WDP").directive('fileInput', ['$parse', function ($parse) {
+    angular.module("WDP").directive('goBack', function ($window) {
         return {
             restrict: 'A',
-            link: function (scope, element, attributes,$http) {
-                element.bind('change', function () {
-                    $parse(attributes.fileInput)
-                        .assign(scope,element[0].files);
-                    scope.$apply();
-                    //$http.post()
+            link: function(scope, element, attrs) {
+                element.on('click', function() {
+                    $window.history.back();
                 });
             }
         };
-    }]);
+    });
 })();

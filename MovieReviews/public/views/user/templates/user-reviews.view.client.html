@@ -6,10 +6,11 @@
     <div class="container">
         <div class="page">
             <div >
-               <ol class="breadcrumb">
-                <li><a href="#!/home">Home</a></li>
-                <li class="active"> Your Reviews</li>
-
+                <div class="go-back"><a go-back>Go Back</a></div>
+                <ol class="breadcrumb">
+                    <li> <a href="#!/home">Home</a></li>
+                    <li><a href="#!/profile">Profile</a></li>
+                    <li class="active">Your Reviews</li>
                 </ol>
             </div>
             <div class="content">
@@ -23,7 +24,7 @@
                         <div class="profile-section row">
                             <h1 class="profile-section-header">Your Reviews</h1>
 
-                            <div ng-show="model.userreviews" ng-repeat="review in model.userreviews">
+                            <div ng-show="model.userreviews" ng-repeat="review in model.userreviews" class="subsection">
                                 <div class="panel panel-info">
                                     <div class="panel-heading"><h3>{{review.movieName}}</h3></div>
                                     <div class="panel-body">
@@ -35,14 +36,6 @@
                                         <div style="align-content: center">Posted On: {{review.posted | date:'fullDate'}}</div>
                                     </div>
                                 </div>
-                                <!--<div class="panel-default">{{review.movieName}}</div>-->
-                                <!--<div class="star-ratings-css">-->
-                                    <!--<div class="star-ratings-css-top" ng-model="rating" ng-style="{'width':{{review.rating}}*(100/5)}"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>-->
-                                    <!--<div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>-->
-                                <!--</div>-->
-                                <!--<div style="align-content: center">{{review.text}}</div>-->
-                                <!--<div style="align-content: center">Posted On: {{review.posted | date:'fullDate'}}</div>-->
-                                <hr/>
                             </div>
 
                             <div ng-hide="model.userreviews">
@@ -52,20 +45,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 hidden-xs">
-                            <div class="side-bar">
-                                <div class="profile-section side-bar-section">
-                                    <h1 class="profile-section-header">Quick Links</h1>
-                                    <ul>
-                                        <li><span><a>Your account</a></span></li>
-                                        <li><span><a>Your account</a></span></li>
-                                        <li><span><a>Your account</a></span></li>
-                                        <li><span><a>Your account</a></span></li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                    </div>
+                    <div ng-include="'views/common/templates/profile-sidebar.view.client.html'"></div>
 
                 </div>
             </div>

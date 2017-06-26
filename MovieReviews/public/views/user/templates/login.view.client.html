@@ -27,13 +27,13 @@
             <div >
                 <ol class="breadcrumb">
                     <li><a href="#!/home">Home</a></li>
-                    <li class="active" Login</li>
+                    <li class="active"> Login</li>
 
                 </ol>
             </div>
-            <div ng-show="model.error" class="row">
+            <div  class="row">
                 <div class="col-xs-12">
-                    <h2 class="login-register-error">{{model.error}}</h2>
+                    <h3 ng-repeat="error in model.loginErrors" class="login-register-error">{{error}}</h3>
                 </div>
             </div>
             <div>
@@ -43,10 +43,10 @@
                             <div class="panel-heading">
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        <a href="#" class="active" id="login-form-link">Login</a>
+                                        <a href class="active" ng-click="model.changeTab('login')" id="login-form-link">Login</a>
                                     </div>
                                     <div class="col-xs-6">
-                                        <a href="#" id="register-form-link">Register</a>
+                                        <a href  ng-click="model.changeTab('register')" id="register-form-link">Register</a>
                                     </div>
                                 </div>
                                 <hr>
@@ -54,7 +54,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <form id="login-form"  name="loginForm" role="form" style="display: block;" novalidate>
+                                        <form id="login-form"   name="loginForm" role="form" style="display: block;" novalidate>
                                             <div class="form-group">
                                                 <input type="text" ng-model="model.username" name="username"  tabindex="1" class="form-control" placeholder="Username" required/>
                                                 <!--<input name="username" ng-model="model.username" class="form-control" id="txtUsername" type="text" placeholder="Username" required/>-->
@@ -100,19 +100,30 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <form id="register-form" name="registerForm" role="form" style="display: none;" novalidate>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <form id="register-form"  name="registerForm" role="form" style="display: none;" novalidate>
                                             <div class="form-group">
                                                 <input type="text" ng-model="model.rusername" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="" required/>
+                                                <div ng-show="registerForm.username.$error.required && registerForm.username.$dirty"><h6 class="warning-text">Required</h6></div>
                                             </div>
                                             <div class="form-group">
                                                 <input type="email" name="email" ng-model="model.remail" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="" required/>
+                                                <div ng-show="registerForm.email.$error.required && registerForm.email.$dirty"><h6 class="warning-text">Required</h6></div>
                                             </div>
                                             <div class="form-group">
                                                 <input type="password" name="password" ng-model="model.rpwd" id="password" tabindex="2" class="form-control" placeholder="Password" required/>
+                                                <div ng-show="registerForm.password.$error.required && registerForm.password.$dirty"><h6 class="warning-text">Required</h6></div>
                                             </div>
+
                                             <div class="form-group">
-                                                <input type="password" name="confirm-password" ng-model="model.rvpwd" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" required/>
+                                                <input type="password" ng-change="model.checkPassword()" name="confirm-password" ng-model="model.rvpwd" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" required/>
+                                                <div ng-show="registerForm.confirm-password.$error.required && registerForm.confirm-password.$dirty"><h6 class="warning-text">Required</h6></div>
+                                                <div ng-show="model.pwdMismatch"><h6 class="warning-text">Password Doesnot Match</h6></div>
                                             </div>
+
+
+
                                             <div class="form-group">
                                                 <div class="row">
                                                     <div class="col-sm-6 col-sm-offset-3">

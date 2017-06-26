@@ -12,6 +12,7 @@ reviewModel.getUserReviews = getUserReviews;
 reviewModel.getUserIdbyReviewId = getUserIdbyReviewId;
 reviewModel.editReview = editReview;
 reviewModel.getAllReviews = getAllReviews;
+reviewModel.deleteUserReviews = deleteUserReviews;
 
 module.exports=reviewModel;
 //------------------------------------------------------------
@@ -50,5 +51,9 @@ function getUserIdbyReviewId(reviewId) {
 
 function getAllReviews() {
     return reviewModel.find();
+}
+
+function deleteUserReviews(userId) {
+    return reviewModel.remove({userId:userId});
 }
 // ---------------------------------------------------------------

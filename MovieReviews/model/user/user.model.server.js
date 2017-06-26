@@ -21,7 +21,8 @@ userModel.addFollower=addFollower;
 userModel.addFollowing=addFollowing;
 userModel.getFollowers = getFollowers;
 userModel.getFollowings=getFollowings;
-userModel.removeFollowing=removeFollowing;
+userModel.unfollow=unfollow;
+userModel.removeFollower = removeFollower;
 
 userModel.addMovie = addMovie;
 userModel.getMoviesFromWatchList = getMoviesFromWatchList;
@@ -29,6 +30,9 @@ userModel.deleteMoviesFromWatchList = deleteMoviesFromWatchList;
 userModel.likeMovie = likeMovie;
 userModel.unlikeMovie  = unlikeMovie;
 userModel.getLikedMovies = getLikedMovies;
+userModel.getPersonById=getPersonById;
+userModel.changePassword= changePassword;
+userModel.getAllUsers=getAllUsers;
 //----------------------------------------------------------
 module.exports = userModel;
 //--------------------------------------------------------
@@ -43,7 +47,20 @@ function createUser(user) {
 }
 
 function deleteUser(userId) {
-    return userModel.remove({_id:userId});
+    // find all followers of this userid
+    // return getFollowers(userId)
+    //     .then(function (followers) {
+    //         console.log("Followers are :"+followers);
+    //         for(f in followers){
+    //             unfollow(userId,followers[f]);
+    //             getFollowings(userId)
+    //                 .then(function (followingids) {
+    //                     console.log("Following ids are "+followingids);
+    //                     unfollow(followers[f],userId);
+    //                 })
+    //         }
+            return userModel.remove({_id:userId});
+        // });
 }
 
 function findUserByEmail(email) {
@@ -56,6 +73,8 @@ function findUserByUsername(username) {
 }
 
 function updateUser(userId,user) {
+    if(typeof user.role === 'string')
+        user.role = user.role.split(',');
     return userModel.update({_id:userId},{$set:user});
 }
 
@@ -101,7 +120,7 @@ function uploadProfileImage(userId,url) {
 
 function addFollower(followeeId,followerId) {
     return userModel
-        .findUserById(followeeId)
+        .findById(followeeId)
         .then(function (user) {
             user.followers.push(followerId);
             return user.save();
@@ -111,10 +130,11 @@ function addFollower(followeeId,followerId) {
 function addFollowing(followeeId,followerId) {
 
     return userModel
-        .findUserById(followerId)
+        .findById(followerId)
         .then(function (user) {
             user.following.push(followeeId);
-            return user.save();
+            user.save();
+           return userModel.addFollower(followeeId,followerId);
         })
 
 }
@@ -122,35 +142,52 @@ function addFollowing(followeeId,followerId) {
 function getFollowers(userId) {
     return userModel
         .findById(userId)
-        .populate('follower','username watchlist')
+        .populate('followers','watchList username url likes reviews')
         .exec();
+
+}
+function getPersonById(userId) {
+    return userModel
+        .findById(userId)
+        .then(function (user) {
+
+            return {
+                username:user.username,
+                url:user.url,
+                likes:user.likes,
+
+            }  ;
+        })
+
 
 }
 
 function getFollowings(userId) {
     return userModel
         .findById(userId)
-        .populate('following','username watchlist')
+        .populate('following','username watchList url likes reviews')
         .exec();
 
 }
 
-function removeFollower(followeeId,followerId) {
+function unfollow(followeeId,followerId) {
     return userModel
-        .findUserById(followeeId)
+        .findById(followerId)
         .then(function (user) {
-            user.followers.push(followerId);
-            return user.save();
+            var index = user.following.indexOf(followeeId);
+            user.following.splice(index,1);
+            user.save();
+            return userModel.removeFollower(followeeId,followerId);
         })
 
 }
-function removeFollowing(followeeId,followerId) {
+function removeFollower(followeeId,followerId) {
 
     return userModel
-        .findUserById(followerId)
+        .findById(followeeId)
         .then(function (user) {
-            var i = user.following.indexOf(followeeId);
-            user.following.splice(i,1);
+            var i = user.followers.indexOf(followerId);
+            user.followers.splice(i,1);
             return user.save();
         })
 }
@@ -218,5 +255,15 @@ function getLikedMovies(userId) {
         .then(function (user) {
             return user.likes;
         })
+}
+
+function changePassword(userId,user) {
+
+    return userModel.update({_id:userId},{$set:user});
+}
+
+
+function getAllUsers() {
+    return userModel.find();
 }
 

@@ -6,15 +6,13 @@
 	<div class="main-body">
 		<div class="container">
 			<div class="page">
-				<!--<div class="breadcrumbs">-->
-
-					<!--<a href="../../../index.html">Home</a>-->
-
-					<!--<a href="movie-list.view.client.html">Movie Review</a>-->
-					<!--<span>The Croods</span>-->
-				<!--</div>-->
-
-				<!-- Main Body -->
+                <div >
+                    <div class="go-back"><a go-back>Go Back</a></div>
+                    <ol class="breadcrumb">
+                        <li> <a href="#!/home">Home</a></li>
+                        <li class="active">{{model.title}}</li>
+                    </ol>
+                </div>
                 <h1 class="text-center ">
                     <strong><a class="section-title" href={{model.homepage}}>{{model.title}}</a>
                     </strong>
@@ -137,11 +135,23 @@
                     <div class="content">
                         <div class="row">
                             <div class="col-md-12">
-                                <div ng-repeat="review in model.reviews">
-                                    Reviewed By :<strong style="color: #003eff">{{review.author}}</strong>
-                                    <p style="word-wrap: break-word">{{review.content}}</p>
-                                    <span>See the full review at <a href={{review.url}}>HERE</a>.</span>
-                                    <hr/>
+
+                                Reviewed By :<strong style="color: #003eff">{{model.reviews[0].author}}</strong>
+                                <p style="word-wrap: break-word">{{model.reviews[0].content}}</p>
+
+                                <!--<div class="see-more">-->
+                                    <!--<h5><span><a data-toggle="collapse" href="#demo2" target="_self" aria-expanded="false" aria-controls="demo2">See user reviews ></a></span></h5>-->
+                                <!--</div>-->
+
+                                <button type="button" class="btn unfollow-btn btn-info" data-toggle="collapse"
+                                        data-target="#demo2" style="margin-top:10px;margin-bottom: 10px">See All </button>
+                                <div id="demo2" class="collapse">
+                                    <div ng-repeat="review in model.reviews" ng-hide="index == 0">
+                                        Reviewed By :<strong style="color: #003eff">{{review.author}}</strong>
+                                        <p style="word-wrap: break-word">{{review.content}}</p>
+                                        <span>See the full review at <a href={{review.url}}>HERE</a>.</span>
+                                        <hr/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +160,10 @@
 
                     <h1>Cast</h1>
                     <h2>Cast overview:</h2>
-                    <div class="content">
+                    <button type="button" class="btn unfollow-btn  btn-info " data-toggle="collapse"
+                            data-target="#demo3" style="margin-top:10px;margin-bottom: 10px">Full cast</button>
+
+                    <div id="demo3"  class="content collapse">
 
                         <div class="row" style="border: 3px solid slategray">
                             <div style="margin: 0;" class="col-sm-2 hidden-xs"><span style="font-size: 20px"></span></div>
@@ -486,6 +499,7 @@
 
                     <div class="content">
                         <div ng-repeat="userreview in model.userreviews">
+                            <h3 style="color:red" ng-show="model.updateError && model.selectedId === userreview._id">{{model.updateError}}</h3>
                             <div ng-show="userreview.movieId === model.movieId">
                                 <div ng-hide="model.selectedId === userreview._id">
                                     <div class="star-ratings-css">
@@ -495,8 +509,14 @@
                                     <!--"-->
                                     <span style="font-size: 20px;" ng-model="text">{{userreview.text}}</span>
                                     <p>- By <a href="">{{userreview.username}}</a></p>
-                                    <button ng-show="userreview.userId === model.userId" ng-click="model.selectReview(userreview._id,userreview.text)" class="btn btn-info btn-block">Edit Review</button>
-                                    <button ng-show="userreview.userId === model.userId" ng-click="model.deleteReview(userreview.userId,userreview._id)" class="btn btn-danger btn-block">Delete Review</button>
+                                    <div ng-show="model.user._id">
+                                    <a class="btn unfollow-btn btn-primary" ng-show="model.user.following.indexOf(userreview.userId)=== -1 && model.user._id!==userreview.userId"
+                                       ng-click="model.addFollowing(userreview.userId)">Follow</a>
+                                    <a class="btn unfollow-btn btn-danger" ng-show="model.user.following.indexOf(userreview.userId)!== -1 && model.user._id!==userreview.userId"
+                                       ng-click="model.unfollow(userreview.userId)">Unfollow</a>
+                                    </div>
+                                    <button ng-show="userreview.userId === model.userId || model.user.role.indexOf('admin')>-1" ng-click="model.selectReview(userreview._id,userreview.text)" class="btn unfollow-btn btn-info">Edit</button>
+                                    <button ng-show="userreview.userId === model.userId || model.user.role.indexOf('admin')>-1" ng-click="model.deleteReview(userreview.userId,userreview._id)" class="btn unfollow-btn btn-danger ">Delete</button>
                                 </div>
                                 <div ng-show="model.selectedId === userreview._id">
                                     <div ng-show="model.error" class="alert alert-danger">{{model.error}}</div>
@@ -506,26 +526,26 @@
                                             <label>Your Rating:</label>
                                             <br/>
 
-                                            <input ng-model="result2" class="star star-5" id="stars-5" type="radio" name="star2" ng-value="'5'"/>
-                                            <label class="star star-5" for="stars-5"></label>
+                                            <input ng-model="result2" class="star star-5" id="stars-{{$index}}5" type="radio" name="star2" ng-value="'5'"/>
+                                            <label class="star star-5" for="stars-{{$index}}5"></label>
 
-                                            <input ng-model="result2" class="star star-4" id="stars-4" type="radio" name="star2" ng-value="'4'"/>
-                                            <label class="star star-4" for="stars-4"></label>
+                                            <input ng-model="result2" class="star star-4" id="stars-{{$index}}4" type="radio" name="star2" ng-value="'4'"/>
+                                            <label class="star star-4" for="stars-{{$index}}4"></label>
 
-                                            <input ng-model="result2" class="star star-3" id="stars-3" type="radio" name="star2" ng-value="'3'"/>
-                                            <label class="star star-3" for="stars-3"></label>
+                                            <input ng-model="result2" class="star star-3" id="stars-{{$index}}3" type="radio" name="star2" ng-value="'3'"/>
+                                            <label class="star star-3" for="stars-{{$index}}3"></label>
 
-                                            <input ng-model="result2" class="star star-2" id="stars-2" type="radio" name="star2" ng-value="'2'"/>
-                                            <label class="star star-2" for="stars-2"></label>
+                                            <input ng-model="result2" class="star star-2" id="stars-{{$index}}2" type="radio" name="star2" ng-value="'2'"/>
+                                            <label class="star star-2" for="stars-{{$index}}2"></label>
 
-                                            <input ng-model="result2" class="star star-1" id="stars-1" type="radio" name="star2" ng-value="'1'"/>
-                                            <label class="star star-1" for="stars-1"></label>
+                                            <input ng-model="result2" class="star star-1" id="stars-{{$index}}1" type="radio" name="star2" ng-value="'1'"/>
+                                            <label class="star star-1" for="stars-{{$index}}1"></label>
 
                                             <label for="review2">Your Review:</label>
                                             <textarea id="review2" class="form-control" rows="4" ng-model="model.text2" style="resize: vertical;"></textarea>
 
-                                            <button ng-click="model.editReview(userreview._id,result2,model.text2)" class="btn btn-success btn-block">Update Review</button>
-                                            <button ng-click="model.cancel()" class="btn btn-success btn-block">Cancel</button>
+                                            <button ng-click="model.editReview(userreview._id,result2,model.text2)" class="btn unfollow-btn btn-success">Update</button>
+                                            <button ng-click="model.cancel()" class="btn unfollow-btn btn-primary ">Cancel</button>
                                         </form>
                                     </div>
                                 </div>
@@ -536,8 +556,8 @@
 
 
                     <div ng-show="model.error" class="alert alert-danger">{{model.error}}</div>
-                    <div class="stars" ng-show="model.user.role === 'critic'">
-                        <form action="">
+                    <div class="stars" ng-show="model.user.role === 'critic' || model.user.role === 'admin'">
+                        <form class="form-horizontal">
 
                             <label>Your Rating:</label>
                             <br/>
@@ -560,17 +580,17 @@
                             <label for="review">Your Review:</label>
                             <textarea id="review" class="form-control" rows="4" ng-model="userreview" style="resize: vertical;"></textarea>
 
-                            <button ng-click="model.submitReview(result,userreview)" class="btn btn-success btn-block">Submit Review</button>
+                            <button ng-click="model.submitReview(result,userreview)" class="btn unfollow-btn btn-primary form-control">Submit</button>
                         </form>
                     </div>
 			</div>
 		</div> <!-- .container -->
 	</div>
 
-	<div ng-include="'views/common/templates/footer.view.client.html'"></div>
+
 
     </div>
-
+<div ng-include="'views/common/templates/footer.view.client.html'"></div>
 
 <!--<script type="text/javascript">-->
     <!--$(document).ready(function() {-->

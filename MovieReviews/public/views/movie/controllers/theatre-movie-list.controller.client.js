@@ -13,6 +13,12 @@
             model.isLoggedIn=isLoggedIn;
             model.likeMovie = likeMovie;
             model.unlikeMovie = unlikeMovie;
+            model.searchMovie = searchMovie;
+
+            function searchMovie(query) {
+                $location.url('/movie/search/'+query);
+            }
+
 model.logout = logout;
             function logout() {
                 UserService

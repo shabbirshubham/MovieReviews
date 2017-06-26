@@ -12,6 +12,7 @@
             this.deleteUser=deleteUser;
             // this.findUserByEmail=findUserByEmail;
             this.findUserByUsername=findUserByUsername;
+            this.findUserById=findUserById;
             this.logout=logout;
             this.checkLoggedIn=checkLoggedIn;
             this.updateUser=updateUser;
@@ -26,20 +27,25 @@
             this.getUserReviews = getUserReviews;
             this.editReview = editReview;
             this.deleteReview = deleteReview;
-                        this.uploadProfileImage = uploadProfileImage;
+            this.uploadProfileImage = uploadProfileImage;
             this.addFollower=addFollower;
             this.addFollowing=addFollowing;
             this.getFollowers=getFollowers;
+            this.getPersonById=getPersonById;
             this.getFollowings=getFollowings;
-            this.removeFollowing = removeFollowing;
+            this.unfollow = unfollow;
             this.getAllReviews = getAllReviews;
+            this.changePassword=changePassword;
+	    this.checkAdmin = checkAdmin;
+            this.getAllUsers = getAllUsers;
+            this.unregisterUser = unregisterUser;
+            this.deleteUserReviews = deleteUserReviews;
 
             function login(username,password) {
                 var url = "/api/project/login";
                 var credentials = {
                     username:username,
-                    password:password,
-                    role:'critic'
+                    password:password
                 };
                 return $http.post(url, credentials)
                     .then(function (response) {
@@ -54,7 +60,15 @@
                         return response.data;
                     })
             }
-            
+
+            function unregisterUser(user) {
+                var url = "/api/project/unregister";
+                return $http.post(url,user)
+                    .then(function (response) {
+                        return response.data;
+                    })
+            }
+
             function deleteUser(userId) {
                 var url = "/api/project/deleteUser/"+userId;
                 return $http.delete(url)
@@ -98,6 +112,9 @@
             }
 
             function createUser(user) {
+                if(user.roles) {
+                    user.roles = user.roles.split(",");
+                }
                 var url = "/api/project/user";
                 // first takes url , second is the actual data
                 return $http
@@ -209,14 +226,14 @@
 
             function addFollower(followerId,followeeId) {
 
-                var url = '/api/project/addFollower/followerId/'+followerId+'/follower/'+followeeId;
+                var url = '/api/project/addFollower/follower/'+followerId+'/followee/'+followeeId;
                 return $http.put(url).then(function (response) {
                     return response.data;
                 })
             }
             function addFollowing(followerId,followeeId) {
-
-                var url = '/api/project/addFollowing/followerId/'+followerId+'/follower/'+followeeId;
+               // / '/api/project/addFollowing/follower/:followerId/followee/:followeeId'
+                var url = '/api/project/addFollowing/follower/'+followerId+'/followee/'+followeeId;
                 return $http.put(url).then(function (response) {
                     return response.data;
                 })
@@ -238,8 +255,16 @@
                 })
             }
 
-            function removeFollowing(followeeId,userId) {
-                var url = '/api/project/removeFollowing/followee/'+followeeId+'/follower/'+userId;
+            function getPersonById(personId) {
+                var url = '/api/project/getPersonById/'+personId;
+                return $http.get(url).then(function (response) {
+                    return response.data;
+                })
+            }
+
+            function unfollow(followeeId,userId) {
+                // /api/project/unfollow/follower/:followerId/followee/:followeeId
+                var url = '/api/project/unfollow/follower/'+userId+'/followee/'+followeeId;
                 return $http.delete(url).then(function (response) {
                     return response.data;
                 })
@@ -251,6 +276,51 @@
                 then(function (response) {
                     return response.data;
                 })
+            }
+
+	function checkAdmin() {
+                var url  = "/api/project/admin/checkAdmin";
+                return $http.get(url).
+                then(function (response) {
+                    return response.data;
+                })
+            }
+            
+            function getAllUsers() {
+                var url = "/api/project/getAllUsers";
+                return $http.get(url).
+                then(function (response) {
+                    return response.data;
+                })
+            }
+
+            function deleteUserReviews(userId) {
+                var url = "/api/project/deleteUserReviews/user/"+userId;
+                return $http.delete(url).
+                then(function (response) {
+                    return response.data;
+                })
+            }
+
+            function findUserById(userId) {
+                var url ='/api/project/findUserById/'+userId;
+                return $http.get(url).then(function (response) {
+                    return response.data;
+                })
+            }
+            function changePassword(userId,newPwd,oldPwd) {
+                var obj ={
+                    oldPwd:oldPwd,
+                    newPwd:newPwd
+
+                };
+                var url = "api/project/changePassword/"+userId;
+                return $http.post(url,obj)
+                    .then(function (response) {
+                    return response.data;
+                },function (err) {
+                        return 'Current Password Incorrect';
+                    })
             }
         }
     }

@@ -20,12 +20,20 @@
              .when('/login',{
                  templateUrl:'views/user/templates/login.view.client.html',
                  controller: 'loginCtrl',
-                 controllerAs:'model'
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
              })
-             .when('/search/:movie',{
-                 templateUrl:'views/home/templates/movie-search-list.view.client.html',
+             .when('/search/notFound',{
+                 templateUrl: 'views/common/templates/no-results.view.client.html',
+                 controller:'homeCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
+             })
+             .when('/movie/search/:query',{
+                 templateUrl:'views/movie/templates/movie-search-list.view.client.html',
                  controller:'movieSearchCtrl',
-                 controllerAs:'model'
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
              })
              .when('/movie/genre/:genreId',{
                  templateUrl:'views/movie/templates/movie-genre-list.view.client.html',
@@ -57,16 +65,33 @@
                  controllerAs:'model',
                  resolve: { isLoggedIn: checkLoggedIn }
              })
+             .when('/now-playing',{
+                 templateUrl:'views/movie/templates/now-playing-movie-list.view.client.html',
+                 controller:'nowplayingmovieListCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
+             })
+             .when('/most-popular',{
+                 templateUrl:'views/movie/templates/popular-movie-list.view.client.html',
+                 controller:'popularmovieListCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkLoggedIn }
+             })
             .when('/contactUs',{
-                templateUrl:'views/contact/templates/contact.view.client.html'
+                templateUrl:'views/contact/templates/contact.view.client.html',
+                controller:'homeCtrl',
+                controllerAs:'model',
+                resolve: { isLoggedIn: checkLoggedIn }
             })
             .when('/aboutUs',{
-                templateUrl:'views/home/templates/about.view.client.html'
+                templateUrl:'views/home/templates/about.view.client.html',
+                controller:'homeCtrl',
+                controllerAs:'model',
+                resolve: { isLoggedIn: checkLoggedIn }
+
             })
-            .when('/joinUs',{
-                templateUrl:'views/home/templates/joinus.view.client.html'
-            })
-            .when('/news/top_news',{
+
+             .when('/news/top_news',{
                 templateUrl:'views/news/templates/topNews.view.client.html',
                 controller:'topNewsCtrl',
                 controllerAs:'model',
@@ -89,32 +114,80 @@
                  templateUrl: 'views/user/templates/profile.view.client.html',
                  controller: 'profileCtrl',
                  controllerAs:"model",
-                 resolve: { isLoggedIn: checkLoggedIn }
+                 resolve: { isLoggedIn: resolveProfile }
              })
              .when('/user/account',{
                  templateUrl:'views/user/templates/account-settings.view.client.html',
                  controller: 'profileCtrl',
                  controllerAs:'model',
-                 resolve: { isLoggedIn: checkLoggedIn }
+                 resolve: { isLoggedIn: resolveProfile }
              })
              .when('/user/watchlist',{
                  templateUrl:'views/user/templates/watchlist.view.client.html',
                  controller: 'profileCtrl',
                  controllerAs:'model',
-                 resolve: { isLoggedIn: checkLoggedIn }
+                 resolve: { isLoggedIn: resolveProfile }
              })
              .when('/user/likedmovies',{
                  templateUrl:'views/user/templates/likedmovies.view.client.html',
                  controller: 'profileCtrl',
                  controllerAs:'model',
-                 resolve: { isLoggedIn: checkLoggedIn }
+                 resolve: { isLoggedIn: resolveProfile }
              })
              .when('/user/user_reviews',{
                  templateUrl:'views/user/templates/user-reviews.view.client.html',
                  controller: 'profileCtrl',
                  controllerAs:'model',
-                 resolve: { isLoggedIn: checkLoggedIn }
+                 resolve: { isLoggedIn: resolveProfile }
              })
+             .when('/user/followers',{
+                 templateUrl:'views/user/templates/followers.view.client.html',
+                 controller: 'profileCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: resolveProfile }
+             })
+             .when('/user/following',{
+                 templateUrl:'views/user/templates/following.view.client.html',
+                 controller: 'profileCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: resolveProfile }
+             })
+             .when('/user/view_person/:personId',{
+                 templateUrl:'views/user/templates/person.view.client.html',
+                 controller: 'personCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: resolveProfile }
+             })
+             .when('/admin/dashboard',{
+                 templateUrl:'views/admin/templates/dashboard.view.client.html',
+                 controller: 'adminDashboardCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkAdmin }
+             })
+             .when("/admin/dashboard/edit_users",{
+                 templateUrl:'views/admin/templates/users.view.client.html',
+                 controller: 'adminDashboardCtrl',
+                 controllerAs:'model',
+                 resolve: { isLoggedIn: checkAdmin }
+             })
+             .when("/admin/dashboard/create_user",{
+                 templateUrl:'views/admin/templates/create-user.view.client.html',
+                 controller: 'adminDashboardCtrl',
+                 controllerAs:'model',
+                  resolve: { isLoggedIn: checkAdmin }
+             })
+             .when("/admin/dashboard/reviews",{
+                 templateUrl:'views/admin/templates/reviews.view.client.html',
+                 controller: 'adminDashboardCtrl',
+                 controllerAs:'model',
+                  resolve: { isLoggedIn: checkAdmin }
+             })
+             .when("/admin/user/:userId",{
+             templateUrl:'views/admin/templates/user-details.view.client.html',
+             controller: 'adminDashboardCtrl',
+             controllerAs:'model',
+             resolve: { isLoggedIn: checkAdmin }
+         })
         }
 
 
@@ -123,7 +196,6 @@
             UserService
                 .checkLoggedIn()
                 .then(function (user) {
-                    console.log(user);
                     if(user==='0'){
                         deferred.resolve({});
                         //$location.url('/');
@@ -133,6 +205,40 @@
                 });
             return deferred.promise;
         }
+
+
+        function resolveProfile($q, $timeout, $http, $location, $rootScope,UserService) {
+            var deferred = $q.defer();
+            UserService
+                .checkLoggedIn()
+                .then(function (user) {
+                    console.log(user);
+                    if(user==='0'){
+                        deferred.reject({});
+                        $location.url('/login');
+                    }else{
+                        deferred.resolve(user);
+                    }
+                });
+            return deferred.promise;
+        }
+
+        function checkAdmin($q, $timeout, $http, $location, $rootScope,UserService) {
+            var deferred = $q.defer();
+            UserService
+                .checkAdmin()
+                .then(function (user) {
+                    if(user==='0'){
+                        deferred.resolve({});
+                        $location.url('/home');
+                    }else{
+                        deferred.resolve(user);
+                    }
+                });
+            return deferred.promise;
+        }
+
+
 
     }
 )();

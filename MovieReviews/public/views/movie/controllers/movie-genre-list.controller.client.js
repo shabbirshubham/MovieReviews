@@ -14,6 +14,12 @@
             model.removebookmark = removebookmark;
             model.likeMovie = likeMovie;
             model.unlikeMovie = unlikeMovie;
+            model.searchMovie = searchMovie;
+
+            function searchMovie(query) {
+                $location.url('/movie/search/'+query);
+            }
+
 model.logout = logout;
             function logout() {
                 UserService
@@ -177,7 +183,7 @@ model.logout = logout;
                         var size = configs.images.profile_sizes[2];
                         var poster_config_path = baseURL + size;
                         MovieService
-                            .getSortedGenreMovies(attr, order, model.genreId)
+                            .getSortedGenreMovies(attr, order, model.genreId,pageNumber)
                             .then(function (response) {
                                 getMovieInfo(response,poster_config_path);
                             });
